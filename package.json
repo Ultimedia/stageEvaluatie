@@ -1,0 +1,12 @@
+{
+  "name": "watm",
+  "dependencies": {},
+  "version": "1.0.0",
+  "subdomain": "watm",
+  "devDependencies": {
+    "grunt": "~0.4.2",
+    "grunt-contrib-compass": "*",
+    "nodemon": "*",
+    "grunt-contrib-copy": "~0.5.0"
+  }
+}

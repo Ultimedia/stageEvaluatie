@@ -1,0 +1,11 @@
+<td><%= question.question_id %></td>
+<td><%= question.question_description_nl %></td>
+<td>
+	<select class="score-option">
+	<% _.each(scoreOptions, function(scoreOption) { %>
+        <option><%= scoreOption.question_rating_rating_nl %></option>
+    <% }); %>
+	</select>
+</td>
+<td><p class="score-points"></p></td>
+<td><textarea class="form-control"></textarea></td>
