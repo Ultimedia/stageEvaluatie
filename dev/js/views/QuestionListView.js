@@ -12,6 +12,9 @@ appData.views.QuestionListView = Backbone.View.extend({
     scoreOptionChangeHandler: function(evt){
     	var selectedScoreModel = appData.collections.scores.models[evt.currentTarget.selectedIndex];
     		$('.score-points', this.$el).text(selectedScoreModel.get('question_rating_points'));
+
+        // update the model
+        
     },
 
     render: function() {

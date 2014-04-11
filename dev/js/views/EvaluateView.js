@@ -2,17 +2,20 @@ appData.views.EvaluateView = Backbone.View.extend({
     initialize: function () {
     	_.bindAll(this);
         
-        this.collection = new InternshipCollection();
-        this.collection.on("sync reset",this.render);
-        this.collection.fetch();
+        appData.collections.internsCollection = new InternshipCollection();
+        appData.collections.internsCollection.on("sync reset",this.render);
+        appData.collections.internsCollection.fetch();
     },
 
-    events: function(){
+    events:{
+        "click #pdfDownload": "pdfDownloadHandler"
+    },
+
+    pdfDownloadHandler: function(){
 
     },
 
     renderTableViews: function(internship){
-
 		var internShipTableView = new appData.views.InternListView({model:internship});
        $('#internshipsTable tbody').append(internShipTableView.render().$el);
 	},
@@ -22,7 +25,7 @@ appData.views.EvaluateView = Backbone.View.extend({
 
         // update the
         $('#internshipsTable tbody', this.$el).empty();
-      	this.collection.each(function(internship){
+      	appData.collections.internsCollection.each(function(internship){
 			this.renderTableViews(internship);  
 		},this);
 

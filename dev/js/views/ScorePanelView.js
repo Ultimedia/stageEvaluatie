@@ -8,7 +8,7 @@ appData.views.ScorePanelView = Backbone.View.extend({
     },
 
     events:{
-      "change #totalScoreOptions": "totalScoreChangeHandler"
+      "change #totalScoreOptions": "totalScoreChangeHandler",
     },
 
     totalScoreChangeHandler: function(evt){
@@ -22,7 +22,7 @@ appData.views.ScorePanelView = Backbone.View.extend({
      },
 
     render: function() {
-		  this.$el.html(this.template({scoreOptions: appData.collections.scores.toJSON()}));
+		  this.$el.html(this.template({scoreOptions: appData.collections.scores.toJSON(), internship: this.model.toJSON() }));
 
       $('#evaluateTable tbody').empty();
       appData.collections.questions.each(function(question){

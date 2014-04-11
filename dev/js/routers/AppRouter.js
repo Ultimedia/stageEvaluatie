@@ -1,6 +1,6 @@
 appData.routers.AppRouter = Backbone.Router.extend({
     routes: {
-        "":                 "home",
+        "":              "home",
         "login":            "login",
         "register":         "register",
         "evaluate":			"evaluate",
@@ -31,7 +31,7 @@ appData.routers.AppRouter = Backbone.Router.extend({
     },
 
     rate: function(id){
-        $('#container').empty().append(new appData.views.ScorePanelView().render().$el);
+        $('#container').empty().append(new appData.views.ScorePanelView({model: appData.collections.internsCollection.where({"internship_id":id})[0]}).render().$el);
     }     
 });
 

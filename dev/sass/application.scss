@@ -1,6 +1,7 @@
 body {
 	background-color: #fff;
 	border-top: 10px solid #00ffff;
+
 }
 
 #brand{
@@ -13,13 +14,26 @@ body {
 	margin-bottom: 40px;
 }
 
+#brand h2{
+	margin-left: 110px;
+	margin-top: 25px;
+	text-transform: uppercase;
+	font-weight: 300;
+	font-size: 24px;
+}
+
+h2, h1, h3, h4, h5{
+	font-family: 'Dosis', sans-serif;
+	text-transform: uppercase;
+}
+
 #brand>header {
 	position: relative;
 }
 
 #brand>header>hgroup>h1 {
 	position: absolute;
-	left: -55px;
+	left: 0;
 	background-image: url("assets/devine_logo.png");
 	background-repeat: no-repeat;
 	margin: 0;
@@ -68,29 +82,78 @@ body {
 	.form-control:focus {
 		z-index: 2;
 	}
+	input{
+		color: #4c4b48;
+		font-size: 1.4em;
+		font-weight: 300;
+		text-transform: uppercase;
+		background-repeat: no-repeat;
+		background-position: right center;
+		border: 1px solid #e8e8e8;
+		border-radius: 5px;
+		padding: 5px;
+		margin-bottom: 10px;
+		background-color: rgb(247, 247, 247);
+	}
+	input.error{
+		background: rgb(255, 225, 234);
+	}
+
 	input[type="email"] {
-		margin-bottom: -1px;
 		border-bottom-right-radius: 0;
 		border-bottom-left-radius: 0;
+		margin-bottom: 10px;
 	}
 	input[type="password"], #bedrijfInput {
 		margin-bottom: 10px;
 		border-top-left-radius: 0;
 		border-top-right-radius: 0;
 	}
+	label.error{
+	display: none !important;
+	}
 }
 
 #languageSelection{
 	display: inline-block;
-	float:right;
+	float: right;
+	position: absolute;
+	right: 15px;
+	top: 10px;
 }
 #languageSelection li{
 	float: left;
 	list-style-type: none;
 	padding-left: 10px;
 	padding-top: 10px;
+
+	a{
+		color: #00ffff;
+		text-transform: uppercase;
+		font-family: Dosis, sans-serif;
+		font-size: 18px;
+		font-style: normal;
+		font-variant: normal;
+		font-weight: 300;
+	}
+
+	a.selected{
+		background: #AAFDFD;
+		color: rgb(51, 51, 51);
+
+	}
 }
 
+
+#scoreTable{
+	tfoot{
+		background: #505050;
+		td{
+			padding: 10px 0;
+			color: #fff;
+		}
+	}
+}
 
 /*
  * Global add-ons
@@ -142,6 +205,16 @@ body {
 }
 
 
+.btn{
+	text-transform: uppercase;
+	font-weight: 300;
+	font-family: Dosis, sans-serif;
+	border-radius: 3px;
+	-webkit-border-radius: 3px;
+	-moz-border-radius: 3px;
+}
+
+
 /*
  * Main content
  */
@@ -159,6 +232,13 @@ body {
   margin-top: 0;
 }
 
+textarea.form-control{
+	height: 70px;
+}
+
+#pdfDownload{
+	margin-bottom: 50px;
+}
 
 /*
  * Placeholder dashboard ideas

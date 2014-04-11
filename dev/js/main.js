@@ -1,4 +1,4 @@
-// data containers
+// application data
 var appData = {
   views: {},
   models: {},
@@ -10,28 +10,26 @@ var appData = {
 };
 
 appData.settings.apiPath = "/api";
+appData.settings.defaultLanguage = "/nl";
 
-// Jquery Document Ready
+// initialise jquery
 $(document).on("ready", function () {
-  appData.router = new appData.routers.AppRouter();
 
-  // Load data on app init
-  appData.collections.questions = new QuestionsCollection();
-  appData.collections.questions.fetch();
-
-
-  appData.collections.scores = new ScoresCollection();
-  appData.collections.scores.fetch();
-
-  // Load templates
-  appData.utils.templates.load(["LoginView", "RegisterView", "HomeView", "EvaluateView", "ScorePanelView", "InternListView", "QuestionListView"],
+  // load backbone templates
+  appData.utils.templates.load(["AppView", "LoginView", "RegisterView", "HomeView", "EvaluateView", "ScorePanelView", "InternListView", "QuestionListView"],
   function () {
 
-      // Init backbone history
-      Backbone.history.start();
+    // create a new app view instance and render it
+    var app = new appData.views.AppView();
+    $("body").prepend(app.render().$el);
+
+    // new backbone router
+    appData.router = new appData.routers.AppRouter();
+      
+    // start history tracking
+    Backbone.history.start();
   });
 });
-
 
 
 

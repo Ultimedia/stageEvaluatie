@@ -9,7 +9,70 @@ $app->get('/companies', 'getCompanies');
 $app->post('/companies', 'addCompany');
 $app->get('/questions', 'getQuestions');
 $app->get('/scores', 'getScores');
+$app->get('/answers/:id', 'getAnswers');
+$app->post('/answers', 'addAnswer');
+$app->post('/evaluation', 'updateEvalution');
 $app->run();
+
+
+function updateEvalution(){
+	$request = Slim::getInstance()->request();
+	$evaluation = json_decode($request->getBody());
+	$sql = "SELECT * FROM stageapp_evaluations WHERE internship_id = :internship_id AND evaluate_term = :evaluate_term";
+	try {
+		$db = getConnection();
+		$stmt = $db->prepare($sql);  
+		$stmt->bindParam("internship_id", $evaluation->internship_id);
+		$stmt->bindParam("evaluate_term", $evaluation->evaluate_term);
+		$stmt->execute();
+		$evalution = $stmt->fetchObject();  
+		$db = null;
+		echo json_encode($evalution); 
+
+	} catch(PDOException $e) {
+		error_log($e->getMessage(), 3, '/var/tmp/php.log');
+		echo '{"error":{"text":'. $e->getMessage() .'}}'; 
+	}
+}
+
+function addAnswer(){
+	$request = Slim::getInstance()->request();
+	$answer = json_decode($request->getBody());
+	$sql = "INSERT INTO stageapp_answers_data (answer_id, question_id, question_rating_id, remarks) VALUES (:answer_id, :question_id, :question_rating_id, :remarks)";
+	try {
+		$db = getConnection();
+		$stmt = $db->prepare($sql);  
+		$stmt->bindParam("answer_id", $answer->answer_id);
+		$stmt->bindParam("question_id", $answer->question_id);
+		$stmt->bindParam("question_rating_id", $answer->question_rating_id);
+		$stmt->bindParam("remarks", $answer->remarks);
+		$stmt->execute();
+		$answer->id = $db->lastInsertId();
+		$db = null;
+		echo json_encode($answer); 
+	} catch(PDOException $e) {
+		error_log($e->getMessage(), 3, '/var/tmp/php.log');
+		echo '{"error":{"text":'. $e->getMessage() .'}}'; 
+	}
+}
+
+function getAnswers($id) {
+	$sql = "SELECT * FROM stageapp_answers_data 
+			LEFT JOIN stageapp_questions ON stageapp_answers_data.question_id = stageapp_questions.question_id 
+			LEFT JOIN stageapp_question_ratings ON stageapp_answers_data.question_rating_id = stageapp_question_ratings.question_rating_id 
+			WHERE answer_id = :id";
+	try {
+		$db = getConnection();
+		$stmt = $db->prepare($sql);  
+		$stmt->bindParam("id", $id);
+		$stmt->execute();
+		$answers = $stmt->fetchObject();  
+		$db = null;
+		echo json_encode($answers); 
+	} catch(PDOException $e) {
+		echo '{"error":{"text":'. $e->getMessage() .'}}'; 
+	}
+}
 
 function getQuestions() {
 	$sql = "select * FROM stageapp_questions";

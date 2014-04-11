@@ -1,5 +1,5 @@
 <td><%= internship.student %></td>
 <td><%= internship.organisation %></td>
 <td><%= internship.coach %></td>
-<td><a href="#rate/interim/<%= internship.internship_id %>" class="btn btn-default">Vul aan</a></td>
-<td><a href="#rate/final/<%= internship.internship_id %>" class="btn btn-default">Vul aan</a></td>
+<td><a href="javascript:;" data-target="interim" data-id="<%= internship.internship_id %>" class="btn btn-default evaluateList">Vul aan</a></td>
+<td><a href="javascript:;" data-target="final" data-id="<%= internship.internship_id %>" class="btn btn-default evaluateList">Vul aan</a></td>

@@ -1,6 +1,6 @@
 (function(){
 
-// data containers
+// application data
 var appData = {
   views: {},
   models: {},
@@ -12,28 +12,26 @@ var appData = {
 };
 
 appData.settings.apiPath = "/api";
+appData.settings.defaultLanguage = "/nl";
 
-// Jquery Document Ready
+// initialise jquery
 $(document).on("ready", function () {
-  appData.router = new appData.routers.AppRouter();
 
-  // Load data on app init
-  appData.collections.questions = new QuestionsCollection();
-  appData.collections.questions.fetch();
-
-
-  appData.collections.scores = new ScoresCollection();
-  appData.collections.scores.fetch();
-
-  // Load templates
-  appData.utils.templates.load(["LoginView", "RegisterView", "HomeView", "EvaluateView", "ScorePanelView", "InternListView", "QuestionListView"],
+  // load backbone templates
+  appData.utils.templates.load(["AppView", "LoginView", "RegisterView", "HomeView", "EvaluateView", "ScorePanelView", "InternListView", "QuestionListView"],
   function () {
 
-      // Init backbone history
-      Backbone.history.start();
+    // create a new app view instance and render it
+    var app = new appData.views.AppView();
+    $("body").prepend(app.render().$el);
+
+    // new backbone router
+    appData.router = new appData.routers.AppRouter();
+      
+    // start history tracking
+    Backbone.history.start();
   });
 });
-
 
 
 
@@ -46,6 +44,18 @@ Company = Backbone.Model.extend({
 		company_email: undefined,
 		company_contact: undefined,
 		company_name: undefined
+	},
+	initialize: function(){
+
+	}
+});
+
+Evaluation = Backbone.Model.extend({
+	url: appData.settings.apiPath + "/evaluation",
+	defaults:{
+		company_id: '',
+		internship_id: '',
+		evaluate_term: ''
 	},
 	initialize: function(){
 
@@ -96,6 +106,15 @@ Score = Backbone.Model.extend({
 	}
 });
 
+Settings = Backbone.Model.extend({
+	defaults:{
+
+	},
+	initialize: function(){
+
+	}
+});
+
 CompanyCollection = Backbone.Collection.extend({
 	model: Company,
 	initialize: function (models,options) { 
@@ -127,21 +146,51 @@ ScoresCollection = Backbone.Collection.extend({
 	}
 });
 
+  // Create the app view container
+  appData.views.AppView = Backbone.View.extend({
+    tagName: 'div',
+    id: "application",
+
+    initialize: function(options) { 
+      _.bindAll(this); 
+
+      // Load data on app init
+      appData.collections.questions = new QuestionsCollection();
+      appData.collections.questions.fetch();
+
+      appData.collections.internsCollection = new InternshipCollection();
+      appData.collections.internsCollection.fetch();
+
+      appData.collections.scores = new ScoresCollection();
+      appData.collections.scores.fetch();
+    }, 
+    
+    render: function() { 
+      this.$el.html(this.template());    
+      return this; 
+    }
+});
+
+
+
 appData.views.EvaluateView = Backbone.View.extend({
     initialize: function () {
     	_.bindAll(this);
         
-        this.collection = new InternshipCollection();
-        this.collection.on("sync reset",this.render);
-        this.collection.fetch();
+        appData.collections.internsCollection = new InternshipCollection();
+        appData.collections.internsCollection.on("sync reset",this.render);
+        appData.collections.internsCollection.fetch();
     },
 
-    events: function(){
+    events:{
+        "click #pdfDownload": "pdfDownloadHandler"
+    },
+
+    pdfDownloadHandler: function(){
 
     },
 
     renderTableViews: function(internship){
-
 		var internShipTableView = new appData.views.InternListView({model:internship});
        $('#internshipsTable tbody').append(internShipTableView.render().$el);
 	},
@@ -151,7 +200,7 @@ appData.views.EvaluateView = Backbone.View.extend({
 
         // update the
         $('#internshipsTable tbody', this.$el).empty();
-      	this.collection.each(function(internship){
+      	appData.collections.internsCollection.each(function(internship){
 			this.renderTableViews(internship);  
 		},this);
 
@@ -183,6 +232,25 @@ appData.views.InternListView = Backbone.View.extend({
      	_.bindAll(this);      
     },
 
+    events: {
+    	"click .evaluateList":"evaluateListHandler"
+    },
+
+    evaluateListHandler: function(evt){
+    	var internshipId = $(evt.target).attr('data-id');
+    	var evaluationTerm = $(evt.target).attr('data-target')
+    	var selectedInternship = appData.collections.internsCollection.where({"internship_id":internshipId});
+
+    	appData.models.evaluationModel = new Evaluation();
+		appData.models.evaluationModel.set('company_id', '');
+		appData.models.evaluationModel.set('internship_id', internshipId);
+		appData.models.evaluationModel.set('evaluate_term', evaluationTerm);
+		appData.models.evaluationModel.save();
+
+    	//"#rate/interim/<%= internship.internship_id %>
+    	//#rate/final/
+    },
+
     render: function() {
     	this.$el.html(this.template({internship: this.model.toJSON()}));
     	return this;
@@ -202,6 +270,15 @@ appData.views.LoginView = Backbone.View.extend({
 
     render: function() {
     	this.$el.html(this.template());
+
+		$('#loginForm', this.$el).validate({
+			submitHandler: function(){
+
+		    // store the user
+		   
+			}
+		});
+
       return this;
     }
 });
@@ -221,6 +298,9 @@ appData.views.QuestionListView = Backbone.View.extend({
     scoreOptionChangeHandler: function(evt){
     	var selectedScoreModel = appData.collections.scores.models[evt.currentTarget.selectedIndex];
     		$('.score-points', this.$el).text(selectedScoreModel.get('question_rating_points'));
+
+        // update the model
+        
     },
 
     render: function() {
@@ -265,7 +345,6 @@ appData.views.RegisterView = Backbone.View.extend({
     }
 });
 
-
 appData.views.ScorePanelView = Backbone.View.extend({
     initialize: function () {
       _.bindAll(this);  
@@ -276,7 +355,7 @@ appData.views.ScorePanelView = Backbone.View.extend({
     },
 
     events:{
-      "change #totalScoreOptions": "totalScoreChangeHandler"
+      "change #totalScoreOptions": "totalScoreChangeHandler",
     },
 
     totalScoreChangeHandler: function(evt){
@@ -290,7 +369,7 @@ appData.views.ScorePanelView = Backbone.View.extend({
      },
 
     render: function() {
-		  this.$el.html(this.template({scoreOptions: appData.collections.scores.toJSON()}));
+		  this.$el.html(this.template({scoreOptions: appData.collections.scores.toJSON(), internship: this.model.toJSON() }));
 
       $('#evaluateTable tbody').empty();
       appData.collections.questions.each(function(question){
@@ -304,7 +383,7 @@ appData.views.ScorePanelView = Backbone.View.extend({
 
 appData.routers.AppRouter = Backbone.Router.extend({
     routes: {
-        "":                 "home",
+        "":              "home",
         "login":            "login",
         "register":         "register",
         "evaluate":			"evaluate",
@@ -335,7 +414,7 @@ appData.routers.AppRouter = Backbone.Router.extend({
     },
 
     rate: function(id){
-        $('#container').empty().append(new appData.views.ScorePanelView().render().$el);
+        $('#container').empty().append(new appData.views.ScorePanelView({model: appData.collections.internsCollection.where({"internship_id":id})[0]}).render().$el);
     }     
 });
 

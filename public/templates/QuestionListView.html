@@ -1,7 +1,9 @@
 <td><%= question.question_id %></td>
 <td><%= question.question_description_nl %></td>
 <td>
-	<select class="score-option">
+	<select class="score-option form-control">
+    <option value="placeholder" disabled selected>Maak een keuze</option>
+
 	<% _.each(scoreOptions, function(scoreOption) { %>
         <option><%= scoreOption.question_rating_rating_nl %></option>
     <% }); %>

@@ -9,6 +9,15 @@ appData.views.LoginView = Backbone.View.extend({
 
     render: function() {
     	this.$el.html(this.template());
+
+		$('#loginForm', this.$el).validate({
+			submitHandler: function(){
+
+		    // store the user
+		   
+			}
+		});
+
       return this;
     }
 });
