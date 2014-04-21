@@ -7,14 +7,6 @@ appData.views.EvaluateView = Backbone.View.extend({
         appData.collections.internsCollection.fetch();
     },
 
-    events:{
-        "click #pdfDownload": "pdfDownloadHandler"
-    },
-
-    pdfDownloadHandler: function(){
-
-    },
-
     renderTableViews: function(internship){
 		var internShipTableView = new appData.views.InternListView({model:internship});
        $('#internshipsTable tbody').append(internShipTableView.render().$el);

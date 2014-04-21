@@ -8,10 +8,16 @@ Internship = Backbone.Model.extend({
 		mentor: undefined,
 		location: undefined,
 		discipline: undefined,
-		coach: undefined
+		coach: undefined,
+		final_score: null,
+		interim_score: null
 	},
-	initialize: function(){
+	initialize: function (models,options) { 
+		this.id = options.id;
+	},
 
-	}
+	url: function() {
+    	return appData.settings.apiPath + "/internshipd/" + this.attributes.internship_id;
+  	}
 });
 

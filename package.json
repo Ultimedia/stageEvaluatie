@@ -1,5 +1,5 @@
 {
-  "name": "watm",
+  "name": "StageApplicatie",
   "dependencies": {},
   "version": "1.0.0",
   "subdomain": "watm",
@@ -7,6 +7,8 @@
     "grunt": "~0.4.2",
     "grunt-contrib-compass": "*",
     "nodemon": "*",
-    "grunt-contrib-copy": "~0.5.0"
+    "grunt-contrib-copy": "~0.5.0",
+    "grunt-contrib-concat": "~0.4.0",
+    "grunt-contrib-watch": "~0.6.1"
   }
 }

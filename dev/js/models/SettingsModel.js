@@ -1,8 +1,7 @@
 Settings = Backbone.Model.extend({
-	defaults:{
-
-	},
+	defaults: {},
 	initialize: function(){
 
 	}
 });
+

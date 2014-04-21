@@ -1,6 +1,6 @@
 QuestionsCollection = Backbone.Collection.extend({
 	url:  appData.settings.apiPath + "/questions",
-	model: Score,
+	model: Question,
 	initialize: function (models,options) { 
 
 	}

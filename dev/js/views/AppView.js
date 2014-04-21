@@ -16,9 +16,28 @@
       appData.collections.scores = new ScoresCollection();
       appData.collections.scores.fetch();
     }, 
+
+    events:{
+      "click #languageSelection": "languageClickHandler",
+      "click #logo": "logoClickHandler"
+    },
+
+    logoClickHandler: function(){
+      window.history.back();
+    },
+
+    languageClickHandler: function(){
+      //appData.settings.lang 
+    },
     
     render: function() { 
       this.$el.html(this.template());    
+
+
+    // new backbone router
+    appData.router = new appData.routers.AppRouter();
+      
+
       return this; 
     }
 });

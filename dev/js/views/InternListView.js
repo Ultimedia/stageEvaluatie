@@ -2,7 +2,7 @@ appData.views.InternListView = Backbone.View.extend({
     tagName: 'tr',
 
     initialize: function () {
-     	_.bindAll(this);      
+     	_.bindAll(this);    
     },
 
     events: {
@@ -11,17 +11,9 @@ appData.views.InternListView = Backbone.View.extend({
 
     evaluateListHandler: function(evt){
     	var internshipId = $(evt.target).attr('data-id');
-    	var evaluationTerm = $(evt.target).attr('data-target')
-    	var selectedInternship = appData.collections.internsCollection.where({"internship_id":internshipId});
+    	var evaluationTerm = $(evt.target).attr('data-target');
 
-    	appData.models.evaluationModel = new Evaluation();
-		appData.models.evaluationModel.set('company_id', '');
-		appData.models.evaluationModel.set('internship_id', internshipId);
-		appData.models.evaluationModel.set('evaluate_term', evaluationTerm);
-		appData.models.evaluationModel.save();
-
-    	//"#rate/interim/<%= internship.internship_id %>
-    	//#rate/final/
+        window.location.hash = "#rate/" + evaluationTerm + "/" + internshipId;
     },
 
     render: function() {

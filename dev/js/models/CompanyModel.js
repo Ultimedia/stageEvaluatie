@@ -3,7 +3,8 @@ Company = Backbone.Model.extend({
 	defaults:{
 		company_email: undefined,
 		company_contact: undefined,
-		company_name: undefined
+		company_name: undefined,
+		company_id: 0
 	},
 	initialize: function(){
 

@@ -10,10 +10,30 @@ $app->post('/companies', 'addCompany');
 $app->get('/questions', 'getQuestions');
 $app->get('/scores', 'getScores');
 $app->get('/answers/:id', 'getAnswers');
-$app->post('/answers', 'addAnswer');
+$app->post('/answer', 'addAnswer');
+$app->post('/internshipd/:id', 'updateInternship');
 $app->post('/evaluation', 'updateEvalution');
 $app->run();
 
+
+function updateInternship($id) {
+	$request = Slim::getInstance()->request();
+	$body = $request->getBody();
+	$internship = json_decode($body);
+	$sql = "UPDATE stageapp_internships SET final_score=:final_score, interim_score=:interim_score WHERE internship_id=:internship_id";
+	try {
+		$db = getConnection();
+		$stmt = $db->prepare($sql);  
+		$stmt->bindParam("final_score", $internship->final_score);
+		$stmt->bindParam("interim_score", $internship->interim_score);
+		$stmt->bindParam("internship_id", $id);
+		$stmt->execute();
+		$db = null;
+		echo json_encode($internship); 
+	} catch(PDOException $e) {
+		echo '{"error":{"text":'. $e->getMessage() .'}}'; 
+	}
+}
 
 function updateEvalution(){
 	$request = Slim::getInstance()->request();
@@ -25,9 +45,24 @@ function updateEvalution(){
 		$stmt->bindParam("internship_id", $evaluation->internship_id);
 		$stmt->bindParam("evaluate_term", $evaluation->evaluate_term);
 		$stmt->execute();
-		$evalution = $stmt->fetchObject();  
+		$matchingEvaluation = $stmt->fetchObject();  
+		
+		// do we already have an evaluation for this student?
+		if($matchingEvaluation){
+			echo json_encode($matchingEvaluation); 
+		// if not insert this as a new entry in the database to create the unique evaluation id
+		}else{
+			$sql = "INSERT INTO stageapp_evaluations (company_id, evaluate_term, internship_id) VALUES (:company_id, :evaluate_term, :internship_id)";
+			$stmt = $db->prepare($sql);  
+			$stmt->bindParam("internship_id", $evaluation->internship_id);
+			$stmt->bindParam("company_id", $evaluation->company_id);
+			$stmt->bindParam("evaluate_term", $evaluation->evaluate_term);
+			$stmt->execute();
+			$evaluation->evaluation_id = $db->lastInsertId();
+			$db = null;
+			echo json_encode($evaluation); 
+		}
 		$db = null;
-		echo json_encode($evalution); 
 
 	} catch(PDOException $e) {
 		error_log($e->getMessage(), 3, '/var/tmp/php.log');
@@ -37,19 +72,55 @@ function updateEvalution(){
 
 function addAnswer(){
 	$request = Slim::getInstance()->request();
-	$answer = json_decode($request->getBody());
-	$sql = "INSERT INTO stageapp_answers_data (answer_id, question_id, question_rating_id, remarks) VALUES (:answer_id, :question_id, :question_rating_id, :remarks)";
+	$evaluation = json_decode($request->getBody());
+	
+	$sql = "SELECT * FROM stageapp_evaluations_data WHERE evaluation_id = :evaluation_id AND question_id = :question_id";
 	try {
 		$db = getConnection();
 		$stmt = $db->prepare($sql);  
-		$stmt->bindParam("answer_id", $answer->answer_id);
-		$stmt->bindParam("question_id", $answer->question_id);
-		$stmt->bindParam("question_rating_id", $answer->question_rating_id);
-		$stmt->bindParam("remarks", $answer->remarks);
+		$stmt->bindParam("question_id", $evaluation->question_id);
+		$stmt->bindParam("evaluation_id", $evaluation->evaluation_id);
 		$stmt->execute();
-		$answer->id = $db->lastInsertId();
+		$matchingEvaluation = $stmt->fetchObject();  
+		
+		// do we already have an evaluation if so update
+		if($matchingEvaluation){
+			$sql = "UPDATE stageapp_evaluations_data SET question_rating_id=:question_rating_id, remarks=:remarks WHERE evaluation_id=:evaluation_id AND question_id = :question_id";
+			try {
+				$db = getConnection();
+				$stmt = $db->prepare($sql);  
+				$stmt->bindParam("question_id", $evaluation->question_id);
+				$stmt->bindParam("evaluation_id", $evaluation->evaluation_id);
+				$stmt->bindParam("question_rating_id", $evaluation->question_rating_id);
+				$stmt->bindParam("remarks", $evaluation->remarks);
+				$stmt->execute();
+				$db = null;
+				echo json_encode($evaluation); 
+			} catch(PDOException $e) {
+				echo '{"error":{"text":'. $e->getMessage() .'}}'; 
+			}
+
+		// if not insert this as a new entry in the database to create the unique evaluation id
+		}else{
+			$sql = "INSERT INTO stageapp_evaluations_data (evaluation_id, question_id, question_rating_id, remarks) VALUES (:evaluation_id, :question_id, :question_rating_id, :remarks)";
+			try {
+				$db = getConnection();
+				$stmt = $db->prepare($sql);  
+				$stmt->bindParam("evaluation_id", $evaluation->evaluation_id);
+				$stmt->bindParam("question_id", $evaluation->question_id);
+				$stmt->bindParam("question_rating_id", $evaluation->question_rating_id);
+				$stmt->bindParam("remarks", $evaluation->remarks);
+				$stmt->execute();
+				$evaluation->in_id = $db->lastInsertId();
+				$db = null;
+				echo json_encode($evaluation); 
+			} catch(PDOException $e) {
+				error_log($e->getMessage(), 3, '/var/tmp/php.log');
+				echo '{"error":{"text":'. $e->getMessage() .'}}'; 
+			}
+		}
 		$db = null;
-		echo json_encode($answer); 
+
 	} catch(PDOException $e) {
 		error_log($e->getMessage(), 3, '/var/tmp/php.log');
 		echo '{"error":{"text":'. $e->getMessage() .'}}'; 
@@ -57,16 +128,16 @@ function addAnswer(){
 }
 
 function getAnswers($id) {
-	$sql = "SELECT * FROM stageapp_answers_data 
-			LEFT JOIN stageapp_questions ON stageapp_answers_data.question_id = stageapp_questions.question_id 
-			LEFT JOIN stageapp_question_ratings ON stageapp_answers_data.question_rating_id = stageapp_question_ratings.question_rating_id 
-			WHERE answer_id = :id";
+	$sql = "SELECT * FROM stageapp_evaluations_data 
+			LEFT JOIN stageapp_questions ON stageapp_evaluations_data.question_id = stageapp_questions.question_id 
+			LEFT JOIN stageapp_question_ratings ON stageapp_evaluations_data.question_rating_id = stageapp_question_ratings.question_rating_id 
+			WHERE evaluation_id = :id ORDER BY stageapp_evaluations_data.question_id";
 	try {
 		$db = getConnection();
 		$stmt = $db->prepare($sql);  
 		$stmt->bindParam("id", $id);
 		$stmt->execute();
-		$answers = $stmt->fetchObject();  
+		$answers = $stmt->fetchAll(PDO::FETCH_OBJ);
 		$db = null;
 		echo json_encode($answers); 
 	} catch(PDOException $e) {
@@ -141,7 +212,7 @@ function addCompany() {
 		$stmt->bindParam("company_email", $company->company_email);
 		$stmt->bindParam("company_name", $company->company_name);
 		$stmt->execute();
-		$company->id = $db->lastInsertId();
+		$company->company_id = $db->lastInsertId();
 		$db = null;
 		echo json_encode($company); 
 	} catch(PDOException $e) {
@@ -152,8 +223,8 @@ function addCompany() {
 
 function getConnection() {
 	$dbhost="127.0.0.1";
-	$dbuser="deb31925_watm";
-	$dbpass="miniketen";
+	$dbuser="test";
+	$dbpass="test";
 	$dbname="deb31925_watm";
 	$dbh = new PDO("mysql:host=$dbhost;dbname=$dbname", $dbuser, $dbpass);	
 	$dbh->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
