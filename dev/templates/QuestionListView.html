@@ -4,7 +4,7 @@
 	<select class="score-option form-control" name="score<%= question.question_id %>" required>
     	<option value="placeholder" disabled selected>Maak een keuze</option>
 		<% _.each(scoreOptions, function(scoreOption, index) { %>
-			<% if(question.question_rating_id == index){ %>
+			<% if(question.question_rating_id == (index+1)){ %>
 				 <option selected><%= scoreOption.question_rating_rating_nl %></option>
 			<% }else{  %>
 				 <option><%= scoreOption.question_rating_rating_nl %></option>
@@ -12,7 +12,7 @@
     	<% }); %>
 	</select>
 </td>
-<td><p class="score-points"><%= question.question_rating_points %></p></td>
+<td><p class="score-points"></p></td>
 <td><textarea class="form-control"><%= question.remarks %></textarea></td>
 
 

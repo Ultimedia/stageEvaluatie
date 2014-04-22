@@ -27,6 +27,11 @@ h2, h1, h3, h4, h5{
 	text-transform: uppercase;
 }
 
+h2.helvetica, h1.helvetica, h3.helvetica, h4.helvetica, h5.helvetica{
+	font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
+	text-transform: none;
+}
+
 #brand>header {
 	position: relative;
 }
@@ -146,13 +151,7 @@ h2, h1, h3, h4, h5{
 
 
 #scoreTable{
-	tfoot{
-		background: #505050;
-		td{
-			padding: 10px 0;
-			color: #fff;
-		}
-	}
+	
 }
 
 /*
@@ -259,3 +258,37 @@ textarea.form-control{
   border-radius: 50%;
 }
 
+select.error{
+	border-color: #a94442;
+-webkit-box-shadow: inset 0 1px 1px rgba(0,0,0,.075);
+box-shadow: inset 0 1px 1px rgba(0,0,0,.075);
+}
+
+#scoreTable label.error{
+	color: #dd5857;
+	padding: 5px;
+	font-size: 12px;
+	font-weight: normal;
+}
+
+.bs-callout-danger {
+background-color: #fdf7f7;
+border-color: #d9534f;
+}
+
+.bs-callout {
+margin: 20px 0;
+padding: 20px;
+border-left: 3px solid #eee;
+}
+
+.score-option{
+	width: 200px;
+}
+
+/* set a max-width for horizontal fluid layout and make it centered */
+.container {
+  margin-right: auto;
+  margin-left: auto;
+  max-width: 960px; /* or 950px */
+}

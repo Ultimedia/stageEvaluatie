@@ -16,8 +16,11 @@ appData.views.QuestionListView = Backbone.View.extend({
     },
 
     render: function() {
-
     	this.$el.html(this.template({question: this.model.toJSON(), scoreOptions: appData.collections.scores.toJSON()}));
+
+        if(this.model.attributes.question_rating_points){
+            $('.score-points', this.$el).text(this.model.attributes.question_rating_points);
+        }
 
     	return this;
     }

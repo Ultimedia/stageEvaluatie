@@ -223,8 +223,8 @@ function addCompany() {
 
 function getConnection() {
 	$dbhost="127.0.0.1";
-	$dbuser="test";
-	$dbpass="test";
+	$dbuser="deb31925_watm";
+	$dbpass="miniketen";
 	$dbname="deb31925_watm";
 	$dbh = new PDO("mysql:host=$dbhost;dbname=$dbname", $dbuser, $dbpass);	
 	$dbh->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);

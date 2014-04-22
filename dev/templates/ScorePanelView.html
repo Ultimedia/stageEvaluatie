@@ -1,5 +1,11 @@
-<h4>Student <%= internship.student %></h4>
-<h5>Tussentijdse evaluatie 2014</h5>
+<h4 class="helvetica">Student <%= internship.student %></h4>
+<h5 class="helvetica">
+<% if(term == "final"){ %>
+  Eindevaluatie  
+<% }else{ %>
+  Tussentijdse evaluatie
+<% } %>
+  2014</h5>
 <div class="table-responsive" id="scoreTable">
   <form id="evaluateForm">
   <table class="table table-striped" id="evaluateTable">
@@ -14,10 +20,10 @@
     </thead>
     <tbody>
     </tbody>
-    <tfoot>
+    <tfoot class="well">
       <tr>
         <td></td>
-        <td>EINDSCORE</td>
+        <td><h4>Eindscore</h3></td>
         <td>
           <select id="totalScoreOptions" name="scoref" class="form-control" required>
             <option value="placeholder" disabled selected>Maak een keuze</option>
@@ -31,7 +37,8 @@
     </tfoot>
   </table>
 </form>
+  <a href="javascript:;" class="btn btn-primary pull-right btn-lg" id="save">Bewaar</a>
 
-  <a href="javascript:;" class="btn btn-primary pull-right" id="pdfDownload">Download PDF</a>
-  <a href="javascript:;" class="btn btn-primary pull-right" id="save">Bewaar</a>
+
+  <a href="javascript:;" class="btn pull-right btn-lg" id="pdfDownload">Download PDF</a>
 </div>

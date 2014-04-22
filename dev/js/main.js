@@ -9,7 +9,7 @@ var appData = {
   templates: {}
 };
 
-appData.settings.apiPath = "/stageEvaluatie/api";
+appData.settings.apiPath = "/api";
 appData.settings.defaultLanguage = "/nl";
 
 // initialise jquery

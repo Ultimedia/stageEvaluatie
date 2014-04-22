@@ -33,14 +33,28 @@ appData.views.ScorePanelView = Backbone.View.extend({
      },
 
     render: function() {
-		  this.$el.html(this.template({scoreOptions: appData.collections.scores.toJSON(), internship: this.model.toJSON() }));
+		  this.$el.html(this.template({scoreOptions: appData.collections.scores.toJSON(), internship: this.model.toJSON(), term: this.collection.term }));
       appData.models.selectedScoreModel = this.model;
+
+
+      var scoresModel;
+      var term = this.collection.term;
+
+      if(term === "interim"){
+        scoresModel = appData.collections.scores.where({'question_rating_points': this.model.attributes.interim_score})[0];
+        $('.score-description', this.$el).text(this.model.attributes.interim_score);
+      }else{
+        scoresModel = appData.collections.scores.where({'question_rating_points': this.model.attributes.final_score})[0];
+        $('.score-description', this.$el).text(this.model.attributes.final_score);
+      }
+
+      console.log(scoresModel);
+      $('#totalScoreOptions', this.$el).val(parseInt(scoresModel.attributes.question_rating_id)-1);
 
       $('#evaluateTable tbody').empty();
       appData.collections.questions.each(function(question){
         this.renderQuestionViews(question);  
       },this);
-
 
       this.wireForm();
 
@@ -65,6 +79,8 @@ appData.views.ScorePanelView = Backbone.View.extend({
       var term = this.collection.term;
       var evaluationModel = this.model;
 
+      console.log(this.model.attributes);
+
       $('#evaluateForm', this.$el).validate({
 
         submitHandler: function(){
@@ -74,14 +90,14 @@ appData.views.ScorePanelView = Backbone.View.extend({
 
             var answerModel = new Answer();
                 answerModel.set('evaluation_id', id);
-                answerModel.set('question_rating_id', $('.score-option', element)[0].selectedIndex);
+                answerModel.set('question_rating_id', parseInt($('.score-option', element)[0].selectedIndex));
                 answerModel.set('question_id', $('td', element).first().attr('data-id'));
                 answerModel.set('remarks', $('textarea', element).val());
                 answerModel.save();
           });
 
           // update the internship model
-          var scoreIndex = parseInt($('#totalScoreOptions')[0].selectedIndex) -1;
+          var scoreIndex = parseInt($('#totalScoreOptions')[0].selectedIndex-1);
           var score = appData.collections.scores.models[scoreIndex].attributes.question_rating_points;
 
           if(term === "interim"){
