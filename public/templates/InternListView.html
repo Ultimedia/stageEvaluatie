@@ -2,20 +2,12 @@
 <td><%= internship.organisation %></td>
 <td><%= internship.coach %></td>
 <td>
-	<a href="javascript:;" data-target="interim" data-id="<%= internship.internship_id %>" class="btn btn-default evaluateList">
-	<% if (internship.interim_score) { %>
-		<%= internship.interim_score %>
-	<% }else{ %>
+	<a href="javascript:;" data-target="interim" data-id="<%= internship.internship_id %>" class="btn btn-default evaluateList interim-score">
 		Vul aan...
-	<% } %>
 	</a>
 </td>
 <td>
-	<a href="javascript:;" data-target="final" data-id="<%= internship.internship_id %>" class="btn btn-default evaluateList">
-	<% if (internship.final_score) { %>
-		<%= internship.final_score %>
-	<% }else{ %>
+	<a href="javascript:;" data-target="final"  data-id="<%= internship.internship_id %>" class="btn btn-default evaluateList final-score">
 		Vul aan...
-	<% } %>
 	</a>
 </td>

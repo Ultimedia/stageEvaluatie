@@ -15,6 +15,7 @@ appData.views.EvaluateView = Backbone.View.extend({
     render: function() {
     	this.$el.html(this.template());
 
+
         // update the
         $('#internshipsTable tbody', this.$el).empty();
       	appData.collections.internsCollection.each(function(internship){

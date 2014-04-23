@@ -28,7 +28,11 @@
           <select id="totalScoreOptions" name="scoref" class="form-control" required>
             <option value="placeholder" disabled selected>Maak een keuze</option>
             <% _.each(scoreOptions, function(scoreOption, index) { %>
-                <option><%= scoreOption.question_rating_rating_nl %></option>
+            <% if(selectedScore == (index+1)){ %>
+               <option selected><%= scoreOption.question_rating_rating_nl %></option>
+            <% }else{  %>
+               <option><%= scoreOption.question_rating_rating_nl %></option>
+            <% } %>
             <% }); %>
           </select>
         </td>
@@ -38,7 +42,5 @@
   </table>
 </form>
   <a href="javascript:;" class="btn btn-primary pull-right btn-lg" id="save">Bewaar</a>
-
-
   <a href="javascript:;" class="btn pull-right btn-lg" id="pdfDownload">Download PDF</a>
 </div>

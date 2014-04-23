@@ -62,7 +62,7 @@ appData.routers.AppRouter = Backbone.Router.extend({
                     appData.collections.evaluationCollection = new EvaluationCollection([], { id:model.attributes.evaluation_id, term: evaluationTerm });
 
                     // render the scorepanel view
-                    $('#container').empty().append(new appData.views.ScorePanelView({collection: appData.collections.evaluationCollection, model: appData.models.selectedInternshipModel}).render().$el);
+                    $('#container').empty().append(new appData.views.ScorePanelView({collection: appData.collections.evaluationCollection, model: appData.models.evaluationModel}).render().$el);
 
                 },
                 error: function (model, response) {

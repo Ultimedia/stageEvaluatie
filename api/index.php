@@ -49,7 +49,20 @@ function updateEvalution(){
 		
 		// do we already have an evaluation for this student?
 		if($matchingEvaluation){
-			echo json_encode($matchingEvaluation); 
+			$sql = "UPDATE stageapp_evaluations SET final_score=:final_score WHERE internship_id = :internship_id AND evaluate_term = :evaluate_term";
+			try {
+				$db = getConnection();
+				$stmt = $db->prepare($sql);  
+				$stmt->bindParam("internship_id", $evaluation->internship_id);
+				$stmt->bindParam("evaluate_term", $evaluation->evaluate_term);
+				$stmt->bindParam("final_score", $evaluation->final_score);
+				$stmt->execute();
+				$db = null;
+				echo json_encode($matchingEvaluation); 
+			} catch(PDOException $e) {
+				echo '{"error":{"text":'. $e->getMessage() .'}}'; 
+			}
+
 		// if not insert this as a new entry in the database to create the unique evaluation id
 		}else{
 			$sql = "INSERT INTO stageapp_evaluations (company_id, evaluate_term, internship_id) VALUES (:company_id, :evaluate_term, :internship_id)";
@@ -164,10 +177,17 @@ function getInternships() {
 	try {
 		$db = getConnection();
 		$stmt = $db->query($sql);  
-		$internship = $stmt->fetchAll(PDO::FETCH_OBJ);
+		$internships = $stmt->fetchAll(PDO::FETCH_OBJ);
+
+		// get evaluation data
+		foreach ($internships as $internship) {
+		    $sql = "select * FROM stageapp_evaluations WHERE stageapp_evaluations.internship_id = " . $internship->internship_id;
+			$stmt = $db->query($sql);  	
+			$internship->evaluations = $stmt->fetchAll(PDO::FETCH_OBJ);
+		}
 		$db = null;
 
-		echo json_encode($internship);
+		echo json_encode($internships);
 	} catch(PDOException $e) {
 		echo '{"error":{"text":'. $e->getMessage() .'}}'; 
 	}

@@ -9,7 +9,7 @@ appData.views.ScorePanelView = Backbone.View.extend({
     },
 
     pdfDownloadHandler: function(){
-
+      
     },
 
     saveHandler: function(){
@@ -33,24 +33,26 @@ appData.views.ScorePanelView = Backbone.View.extend({
      },
 
     render: function() {
-		  this.$el.html(this.template({scoreOptions: appData.collections.scores.toJSON(), internship: this.model.toJSON(), term: this.collection.term }));
-      appData.models.selectedScoreModel = this.model;
-
-
-      var scoresModel;
       var term = this.collection.term;
+      var score = null;
 
-      if(term === "interim"){
-        scoresModel = appData.collections.scores.where({'question_rating_points': this.model.attributes.interim_score})[0];
-        $('.score-description', this.$el).text(this.model.attributes.interim_score);
-      }else{
-        scoresModel = appData.collections.scores.where({'question_rating_points': this.model.attributes.final_score})[0];
-        $('.score-description', this.$el).text(this.model.attributes.final_score);
+      appData.models.selectedScoreModel = this.model;
+      appData.models.selectedScoreModel = appData.collections.scores.where({'question_rating_points': this.model.attributes.final_score})[0];
+
+      // prefill data      
+      if(appData.models.selectedScoreModel){
+        score = appData.models.selectedScoreModel.attributes.question_rating_id;
       }
 
-      console.log(scoresModel);
-      $('#totalScoreOptions', this.$el).val(parseInt(scoresModel.attributes.question_rating_id)-1);
+		  this.$el.html(this.template({scoreOptions: appData.collections.scores.toJSON(), internship: this.model.toJSON(), term: this.collection.term, selectedScore: score }));
 
+      // prefill data
+      if(appData.models.selectedScoreModel){
+        // if we are updating an evaluation, prefill the form
+        $('.score-description', this.$el).text(appData.models.selectedScoreModel.attributes.question_ratings_context_nl);
+      }
+
+      // add the questions
       $('#evaluateTable tbody').empty();
       appData.collections.questions.each(function(question){
         this.renderQuestionViews(question);  
@@ -58,6 +60,7 @@ appData.views.ScorePanelView = Backbone.View.extend({
 
       this.wireForm();
 
+      // if we have prefilled data, enter it
       var renderQuestions = this.renderQuestionViews;
       var dataCollection = this.collection;
       $.when(this.collection.fetch()).then(function() {
@@ -79,15 +82,11 @@ appData.views.ScorePanelView = Backbone.View.extend({
       var term = this.collection.term;
       var evaluationModel = this.model;
 
-      console.log(this.model.attributes);
-
       $('#evaluateForm', this.$el).validate({
-
         submitHandler: function(){
 
           // now save or update the data in the database
           $('.score').each(function(index, element){
-
             var answerModel = new Answer();
                 answerModel.set('evaluation_id', id);
                 answerModel.set('question_rating_id', parseInt($('.score-option', element)[0].selectedIndex));
@@ -100,12 +99,8 @@ appData.views.ScorePanelView = Backbone.View.extend({
           var scoreIndex = parseInt($('#totalScoreOptions')[0].selectedIndex-1);
           var score = appData.collections.scores.models[scoreIndex].attributes.question_rating_points;
 
-          if(term === "interim"){
-            evaluationModel.set('final_score', score);
-          }else{
-            evaluationModel.set('final_score', score);
-          }
-
+          // save the score
+          evaluationModel.set('final_score', score);
           $.when(evaluationModel.save()).then(function() {
             window.location = "#evaluate";
           });

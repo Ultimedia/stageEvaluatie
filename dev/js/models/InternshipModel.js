@@ -9,8 +9,7 @@ Internship = Backbone.Model.extend({
 		location: undefined,
 		discipline: undefined,
 		coach: undefined,
-		final_score: null,
-		interim_score: null
+		evaluations: []
 	},
 	initialize: function (models,options) { 
 		this.id = options.id;
