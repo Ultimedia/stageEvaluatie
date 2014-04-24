@@ -13,8 +13,30 @@ $app->get('/answers/:id', 'getAnswers');
 $app->post('/answer', 'addAnswer');
 $app->post('/internshipd/:id', 'updateInternship');
 $app->post('/evaluation', 'updateEvalution');
+$app->post('/login', 'login');
 $app->run();
 
+
+function login(){
+	$request = Slim::getInstance()->request();
+	$body = $request->getBody();
+	$loginData = json_decode($body);
+
+	$email = $loginData->email;
+	$password = $loginData->password;
+
+	
+	$client=new soapclient('https://services.howest.be/Howest.Identity.Web.Service/v1.1/facade.asmx?WSDL', array('trace' => 1));
+	$result = $client->AuthenticateUserByEmail(array('email'=>$email,'password'=>$password)); // Kan niet encrypteren voor webservice, moet zo verstuurd worden... 
+	
+	if($result->AuthenticateUserByEmailResult == true) {
+		// Login correct
+		echo true;
+	} else {
+		// Login fout
+		echo false;
+	}
+}
 
 function updateInternship($id) {
 	$request = Slim::getInstance()->request();

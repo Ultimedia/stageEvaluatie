@@ -1,5 +1,7 @@
 Settings = Backbone.Model.extend({
-	defaults: {},
+	defaults: {
+		loggedIn: false
+	},
 	initialize: function(){
 
 	}

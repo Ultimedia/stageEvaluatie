@@ -28,12 +28,16 @@
           <select id="totalScoreOptions" name="scoref" class="form-control" required>
             <option value="placeholder" disabled selected>Maak een keuze</option>
             <% _.each(scoreOptions, function(scoreOption, index) { %>
-            <% if(selectedScore == (index+1)){ %>
-               <option selected><%= scoreOption.question_rating_rating_nl %></option>
-            <% }else{  %>
-               <option><%= scoreOption.question_rating_rating_nl %></option>
-            <% } %>
-            <% }); %>
+
+              <!-- Verberg de "niet van toepassing optie -->
+              <% if((index+1) != scoreOptions.length){ %>
+                <% if(selectedScore == (index+1)){ %>
+                   <option selected><%= scoreOption.question_rating_rating_nl %></option>
+                <% }else{  %>
+                   <option><%= scoreOption.question_rating_rating_nl %></option>
+                <% } %>
+                <% } %>
+              <% }); %>
           </select>
         </td>
         <td  colspan="2" class="score-description"></td>

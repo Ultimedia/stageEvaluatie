@@ -20,7 +20,8 @@ $(document).on("ready", function () {
   function () {
 
     // create a new app view instance and render it
-    var settings = new Settings(); 
+    appData.settings = new Settings(); 
+    
     var app = new appData.views.AppView();
     $("body").prepend(app.render().$el);
 
