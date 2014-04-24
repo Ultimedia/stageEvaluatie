@@ -132,11 +132,102 @@ Score = Backbone.Model.extend({
 
 Settings = Backbone.Model.extend({
 	defaults: {
-		loggedIn: false
+		loggedIn: false,
+		language: "nl",
+		copy: {
+			nl: {
+				general: {
+					title: "DEVINE STAGE EVALUATIE"
+				},
+				home: {
+					companyBtn: "STAGEBEDRIJF OF ORGANISATIE"
+				},
+				registration: {
+					registerTitle: "Registratie",
+					registerBtn: "REGISTREER",
+					nameField: "NAAM",
+					emailField: "EMAIL",
+					companyField: "BEDRIJF"
+				},
+				login: {
+					loginBtn: "LOGIN",
+					emailField: "EMAIL",
+					passwordField: "PASSWORD",
+					loginError: "Je paswoord is niet correct of je hebt geen toegang tot het stageplatform."
+				},
+				internships:{
+					studentLabel: "Student",
+					organisationLabel: "Organisatie",
+					mentorLabel: "Begeleider",
+					interimLabel: "Tussentijdse evaluatie",
+					finalLabel: "Eindevaluatie",
+					evaluateBtn: "Vul aan..."
+				},
+				evaluation: {
+					questionLabel: "Vraag",
+					ratingLabel: "Beoordeling",
+					scoreLabel: "Punt",
+					remarkLabel: "Opmerking",
+					selectionLabel: "Maak een keuze",
+					requiredField: "Dit veld moet worden ingevuld",
+					finalScoreLabel: "Eindscore"
+				},
+				error: {
+					notFound: "<b>404:</b> Deze pagina werd niet gevonden"
+				}
+			},
+
+			en: {
+				general: {
+					title: "DEVINE INTERNSHIP EVALUATION"
+				},
+				home: {
+					companyBtn: "COMPANY OR ORGANISATION"
+				},
+				registration: {
+					registerTitle: "Registration",
+					registerBtn: "REGISTER",
+					nameField: "NAME",
+					emailField: "EMAIL",
+					companyField: "COMPANY"
+				},
+				login: {
+					loginBtn: "LOGIN",
+					emailField: "EMAIL",
+					passwordField: "PASSWORD",
+					loginError: "Je paswoord is niet correct of je hebt geen toegang tot het stageplatform."
+				},
+				internships:{
+					studentLabel: "Student",
+					organisationLabel: "Organisatin",
+					mentorLabel: "Mentor",
+					interimLabel: "Interim evaluation",
+					finalLabel: "Final evaluation",
+					evaluateBtn: "Evaluate...",
+				},
+				evaluation: {
+					questionLabel: "Question",
+					ratingLabel: "Rating",
+					scoreLabel: "Score",
+					remarkLabel: "Remark",
+					selectionLabel: "Select a score",
+					requiredField: "This field is required",
+					finalScoreLabel: "Final score"
+				},
+				error: {
+				  notFound: "<b>404:</b> The page could not be found"
+				}
+			}
+		}
 	},
 	initialize: function(){
+    	this.bind("change:language", this.languageChangeHandler)
+	},
 
-	}
+	// update the language
+    languageChangeHandler: function(event){
+    	Backbone.trigger('languageChangeHandler');
+    }
 });
 
 
@@ -223,18 +314,21 @@ ScoresCollection = Backbone.Collection.extend({
       window.history.back();
     },
 
-    languageClickHandler: function(){
-      //appData.settings.lang 
+    languageClickHandler: function(evt){
+      if(!$(evt.target).hasClass('selected')){
+
+        // set button
+        $('#languageSelection li a').toggleClass('selected');
+        appData.settings.set('language', $(evt.target).attr('data-lang'));
+      }
     },
     
     render: function() { 
       this.$el.html(this.template());    
 
-
-    // new backbone router
-    appData.router = new appData.routers.AppRouter();
-      
-
+      // new backbone router
+      appData.router = new appData.routers.AppRouter();
+    
       return this; 
     }
 });
@@ -273,6 +367,7 @@ appData.views.EvaluateView = Backbone.View.extend({
 appData.views.HomeView = Backbone.View.extend({
     initialize: function () {
     	_.bindAll(this);
+    	Backbone.on('languageChangeHandler', this.render);
     },
 
     events: function(){
@@ -280,11 +375,10 @@ appData.views.HomeView = Backbone.View.extend({
     },
 
     render: function() {
-    	this.$el.html(this.template());
+    	this.$el.html(this.template({copy: appData.settings.attributes.copy[appData.settings.attributes.language].home  }));
 		return this;
     }
 });
-
 
 appData.views.InternListView = Backbone.View.extend({
     tagName: 'tr',
@@ -334,6 +428,7 @@ appData.views.InternListView = Backbone.View.extend({
 appData.views.LoginView = Backbone.View.extend({
     initialize: function () {
       _.bindAll(this);    
+      Backbone.on('languageChangeHandler', this.render);
     },
 
     events: function(){
@@ -341,35 +436,37 @@ appData.views.LoginView = Backbone.View.extend({
     },
 
     render: function() {
-    	this.$el.html(this.template());
+    	this.$el.html(this.template({copy: appData.settings.attributes.copy[appData.settings.attributes.language].login}));
 
       var template = this.$el;
 
-		$('#loginForm', this.$el).validate({
-			submitHandler: function(){
+  		$('#loginForm', this.$el).validate({
+  			submitHandler: function(){
 
-		    // store the user
-		    appData.models.userModel = new User();
-        appData.models.userModel.set('password', $('#password', template).val());
-        appData.models.userModel.set('email', $('#email', template).val());
-        appData.models.userModel.save(null, {
-            success: function (model, response) {
-              $('#errorBox').addClass('hide');
+  		    // store the user
+  		    appData.models.userModel = new User();
+          appData.models.userModel.set('password', $('#password', template).val());
+          appData.models.userModel.set('email', $('#email', template).val());
+          appData.models.userModel.save(null, {
+              success: function (model, response) {
+                $('#errorBox').addClass('hide');
 
-              // set loggedIn to true
-              appData.settings.set('loggedIn', true);
-              appData.router.navigate('evaluate', true);
-            },
-            error: function (model, response) {
-              $('#errorBox').removeClass('hide');
-            }
-        });
-			}
-		});
+                // set loggedIn to true
+                appData.settings.set('loggedIn', true);
+                appData.router.navigate('evaluate', true);
+              },
+              error: function (model, response) {
+                $('#errorBox').removeClass('hide');
+              }
+          });
+  			}
+  		});
 
       return this;
     }
 });
+
+
 
 appData.views.NotFoundView = Backbone.View.extend({
     initialize: function () {
@@ -414,7 +511,8 @@ appData.views.QuestionListView = Backbone.View.extend({
 
 appData.views.RegisterView = Backbone.View.extend({
     initialize: function () {
-     	_.bindAll(this);      
+     	_.bindAll(this);    
+        Backbone.on('languageChangeHandler', this.render);  
     },
 
     registerHandler: function(){
@@ -422,12 +520,12 @@ appData.views.RegisterView = Backbone.View.extend({
     },
 
     render: function() {
-    	this.$el.html(this.template());
-        this.submitHandler();
+        this.$el.html(this.template({copy: appData.settings.attributes.copy[appData.settings.attributes.language].registration}));
+        this.wireForm();
     	return this;
     },
 
-    submitHandler: function(){
+    wireForm: function(){
 
         $('#registerForm', this.$el).validate({
             submitHandler: function(){

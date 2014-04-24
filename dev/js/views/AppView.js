@@ -26,18 +26,21 @@
       window.history.back();
     },
 
-    languageClickHandler: function(){
-      //appData.settings.lang 
+    languageClickHandler: function(evt){
+      if(!$(evt.target).hasClass('selected')){
+
+        // set button
+        $('#languageSelection li a').toggleClass('selected');
+        appData.settings.set('language', $(evt.target).attr('data-lang'));
+      }
     },
     
     render: function() { 
       this.$el.html(this.template());    
 
-
-    // new backbone router
-    appData.router = new appData.routers.AppRouter();
-      
-
+      // new backbone router
+      appData.router = new appData.routers.AppRouter();
+    
       return this; 
     }
 });

@@ -1,6 +1,7 @@
 appData.views.RegisterView = Backbone.View.extend({
     initialize: function () {
-     	_.bindAll(this);      
+     	_.bindAll(this);    
+        Backbone.on('languageChangeHandler', this.render);  
     },
 
     registerHandler: function(){
@@ -8,12 +9,12 @@ appData.views.RegisterView = Backbone.View.extend({
     },
 
     render: function() {
-    	this.$el.html(this.template());
-        this.submitHandler();
+        this.$el.html(this.template({copy: appData.settings.attributes.copy[appData.settings.attributes.language].registration}));
+        this.wireForm();
     	return this;
     },
 
-    submitHandler: function(){
+    wireForm: function(){
 
         $('#registerForm', this.$el).validate({
             submitHandler: function(){
