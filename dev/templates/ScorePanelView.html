@@ -1,9 +1,9 @@
 <h4 class="helvetica">Student <%= internship.student %></h4>
 <h5 class="helvetica">
 <% if(term == "final"){ %>
-  Eindevaluatie  
+  <%= copy.finalLabel %>  
 <% }else{ %>
-  Tussentijdse evaluatie
+  <%= copy.interimLabel %>  
 <% } %>
   2014</h5>
 <div class="table-responsive" id="scoreTable">
@@ -12,10 +12,10 @@
     <thead>
       <tr>
         <th></th>
-        <th>Vraag</th>
-        <th>Beoordeling</th>
-        <th style="width:70px;">Punt</th>
-        <th style="width: 200px;">Opmerking</th>
+        <th><%= copy.questionLabel %></th>
+        <th><%= copy.ratingLabel %></th>
+        <th style="width:70px;"><%= copy.scoreLabel %></th>
+        <th style="width: 200px;"><%= copy.remarkLabel %></th>
       </tr>
     </thead>
     <tbody>
@@ -23,21 +23,28 @@
     <tfoot class="well">
       <tr>
         <td></td>
-        <td><h4>Eindscore</h3></td>
+        <td><h4><%= copy.finalScoreLabel %></h3></td>
         <td>
           <select id="totalScoreOptions" name="scoref" class="form-control" required>
-            <option value="placeholder" disabled selected>Maak een keuze</option>
+            <option value="placeholder" disabled selected><%= copy.selectionLabel %></option>
             <% _.each(scoreOptions, function(scoreOption, index) { %>
+              <!-- Select the right language option -->
+              <% var option; 
+                if(language == "en"){
+                  option = scoreOption.question_rating_rating_en;
+                }else{
+                  option = scoreOption.question_rating_rating_nl;
+                }
+              %>
 
               <!-- Verberg de "niet van toepassing optie -->
-              <% if((index+1) != scoreOptions.length){ %>
-                <% if(selectedScore == (index+1)){ %>
-                   <option selected><%= scoreOption.question_rating_rating_nl %></option>
-                <% }else{  %>
-                   <option><%= scoreOption.question_rating_rating_nl %></option>
-                <% } %>
-                <% } %>
-              <% }); %>
+              <% if((index+1) != scoreOptions.length){ 
+                 var selected = "";
+                 
+                 if(parseInt(selectedScore) == (index+1)){  selected = "selected"; } %>
+                   <option <%= selected %>><%= option %></option>
+              <% } %>
+            <% }); %>
           </select>
         </td>
         <td  colspan="2" class="score-description"></td>
@@ -45,6 +52,6 @@
     </tfoot>
   </table>
 </form>
-  <a href="javascript:;" class="btn btn-primary pull-right btn-lg" id="save">Bewaar</a>
-  <a href="javascript:;" class="btn pull-right btn-lg" id="pdfDownload">Download PDF</a>
+  <a href="javascript:;" class="btn btn-primary pull-right btn-lg" id="save"><%= copy.saveLabel %></a>
+  <a href="javascript:;" class="btn pull-right btn-lg" id="pdfDownload"><%= copy.exportLabel %></a>
 </div>

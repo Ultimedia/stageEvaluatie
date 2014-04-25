@@ -6,6 +6,8 @@ appData.views.ScorePanelView = Backbone.View.extend({
   		appData.collections.questions = new QuestionsCollection();
       appData.collections.questions.on("sync reset",this.render);
   		appData.collections.questions.fetch();
+
+      Backbone.on('languageChangeHandler', this.updateLanguage);  
     },
 
     pdfDownloadHandler: function(){
@@ -24,12 +26,26 @@ appData.views.ScorePanelView = Backbone.View.extend({
 
     totalScoreChangeHandler: function(evt){
       var selectedScoreModel = appData.collections.scores.models[parseInt(evt.currentTarget.selectedIndex) -1];
-      $('.score-description', this.$el).text(selectedScoreModel.get('question_ratings_context_nl'));
+
+      var copy = selectedScoreModel.get('question_ratings_context_nl');
+      if(appData.settings.attributes.language == "en"){
+        copy = selectedScoreModel.get('question_ratings_context_en');
+      }
+
+      $('.score-description', this.$el).text(copy);
     },
 
     renderQuestionViews: function(questionModel){
 		    var questionTableView = new appData.views.QuestionListView({model:questionModel, collection: this.collection});
         $('#evaluateTable tbody').append(questionTableView.render().$el);
+     },
+
+     updateLanguage: function(){
+            var term = this.collection.term;
+      var score = null;
+
+      appData.models.selectedScoreModel = this.model;
+      this.$el.html(this.template({scoreOptions: appData.collections.scores.toJSON(), internship: appData.models.selectedInternshipModel.toJSON(), term: this.collection.term, selectedScore: score, copy: appData.settings.attributes.copy[appData.settings.attributes.language].evaluation, language: appData.settings.attributes.language }));
      },
 
     render: function() {
@@ -43,13 +59,20 @@ appData.views.ScorePanelView = Backbone.View.extend({
       if(appData.models.selectedScoreModel){
         score = appData.models.selectedScoreModel.attributes.question_rating_id;
       }
+      console.log(score + "score");
 
-		  this.$el.html(this.template({scoreOptions: appData.collections.scores.toJSON(), internship: this.model.toJSON(), term: this.collection.term, selectedScore: score }));
+		  this.$el.html(this.template({scoreOptions: appData.collections.scores.toJSON(), internship: appData.models.selectedInternshipModel.toJSON(), term: this.collection.term, selectedScore: score, copy: appData.settings.attributes.copy[appData.settings.attributes.language].evaluation, language: appData.settings.attributes.language }));
 
       // prefill data
       if(appData.models.selectedScoreModel){
+        var copy = appData.models.selectedScoreModel.attributes.question_ratings_context_nl;
+
+        if(appData.settings.attributes.language === "en"){
+          copy = appData.models.selectedScoreModel.attributes.question_ratings_context_en;
+        }
+
         // if we are updating an evaluation, prefill the form
-        $('.score-description', this.$el).text(appData.models.selectedScoreModel.attributes.question_ratings_context_nl);
+        $('.score-description', this.$el).text(copy);
       }
 
       // add the questions
@@ -100,6 +123,7 @@ appData.views.ScorePanelView = Backbone.View.extend({
           var score = appData.collections.scores.models[scoreIndex].attributes.question_rating_points;
 
           // save the score
+          evaluationModel.set('update_score', true);
           evaluationModel.set('final_score', score);
           $.when(evaluationModel.save()).then(function() {
             window.location = "#evaluate";

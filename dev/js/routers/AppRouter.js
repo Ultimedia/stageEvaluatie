@@ -54,7 +54,8 @@ appData.routers.AppRouter = Backbone.Router.extend({
                 if(appData.models.myCompanyModel){
                     appData.models.evaluationModel.set('company_id', appData.models.myCompanyModel.get('company_id'));
                 }
-                
+        
+                appData.models.evaluationModel.set('update_score', false);
                 appData.models.evaluationModel.set('internship_id', internshipId);
                 appData.models.evaluationModel.set('evaluate_term', evaluationTerm);
                 appData.models.evaluationModel.save(null, {

@@ -4,10 +4,6 @@ appData.views.LoginView = Backbone.View.extend({
       Backbone.on('languageChangeHandler', this.render);
     },
 
-    events: function(){
-
-    },
-
     render: function() {
     	this.$el.html(this.template({copy: appData.settings.attributes.copy[appData.settings.attributes.language].login}));
 

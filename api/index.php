@@ -71,18 +71,23 @@ function updateEvalution(){
 		
 		// do we already have an evaluation for this student?
 		if($matchingEvaluation){
-			$sql = "UPDATE stageapp_evaluations SET final_score=:final_score WHERE internship_id = :internship_id AND evaluate_term = :evaluate_term";
-			try {
-				$db = getConnection();
-				$stmt = $db->prepare($sql);  
-				$stmt->bindParam("internship_id", $evaluation->internship_id);
-				$stmt->bindParam("evaluate_term", $evaluation->evaluate_term);
-				$stmt->bindParam("final_score", $evaluation->final_score);
-				$stmt->execute();
-				$db = null;
+
+			if($evaluation->update_score){
+				$sql = "UPDATE stageapp_evaluations SET final_score=:final_score WHERE internship_id = :internship_id AND evaluate_term = :evaluate_term";
+				try {
+					$db = getConnection();
+					$stmt = $db->prepare($sql);  
+					$stmt->bindParam("internship_id", $evaluation->internship_id);
+					$stmt->bindParam("evaluate_term", $evaluation->evaluate_term);
+					$stmt->bindParam("final_score", $evaluation->final_score);
+					$stmt->execute();
+					$db = null;
+					echo json_encode($matchingEvaluation); 
+				} catch(PDOException $e) {
+					echo '{"error":{"text":'. $e->getMessage() .'}}'; 
+				}
+			}else{
 				echo json_encode($matchingEvaluation); 
-			} catch(PDOException $e) {
-				echo '{"error":{"text":'. $e->getMessage() .'}}'; 
 			}
 
 		// if not insert this as a new entry in the database to create the unique evaluation id

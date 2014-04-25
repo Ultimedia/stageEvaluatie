@@ -15,6 +15,8 @@
 
       appData.collections.scores = new ScoresCollection();
       appData.collections.scores.fetch();
+
+      Backbone.on('languageChangeHandler', this.changeLanguage);  
     }, 
 
     events:{
@@ -36,12 +38,14 @@
     },
     
     render: function() { 
-      this.$el.html(this.template());    
-
-      // new backbone router
+      this.$el.html(this.template({copy: appData.settings.attributes.copy[appData.settings.attributes.language].general}));    
       appData.router = new appData.routers.AppRouter();
-    
+ 
       return this; 
+    },
+
+    changeLanguage: function(){
+      //$('#brand h2').text(appData.settings.attributes.copy[appData.settings.attributes.language].general.title);
     }
 });
 

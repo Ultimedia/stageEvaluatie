@@ -2,7 +2,8 @@ appData.views.InternListView = Backbone.View.extend({
     tagName: 'tr',
 
     initialize: function () {
-     	_.bindAll(this);    
+     	_.bindAll(this);  
+        Backbone.on('languageChangeHandler', this.render);  
     },
 
     events: {
@@ -17,13 +18,14 @@ appData.views.InternListView = Backbone.View.extend({
     },
 
     render: function() {
-    	this.$el.html(this.template({internship: this.model.toJSON()}));
+    	this.$el.html(this.template({internship: this.model.toJSON(), copy: appData.settings.attributes.copy[appData.settings.attributes.language].internships}));
         var myTemplate = this.$el;
 
         // add the evalution score
         var evaluations = this.model.get('evaluations');
         if(evaluations.length > 0){
             $(evaluations).each(function(index, evaluation){
+
                 if(evaluation.final_score !== ""){
                     switch(evaluation.evaluate_term){
                         case "interim":
@@ -39,5 +41,4 @@ appData.views.InternListView = Backbone.View.extend({
         }
     	return this;
     }
-   
 });

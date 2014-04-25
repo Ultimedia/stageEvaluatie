@@ -38,7 +38,11 @@ Settings = Backbone.Model.extend({
 					remarkLabel: "Opmerking",
 					selectionLabel: "Maak een keuze",
 					requiredField: "Dit veld moet worden ingevuld",
-					finalScoreLabel: "Eindscore"
+					finalScoreLabel: "Eindscore",
+					interimLabel: "Tussentijdse evaluatie",
+					finalLabel: "Eindevaluatie",
+					saveLabel: "Bewaar",
+					exportLabel: "Download PDF"
 				},
 				error: {
 					notFound: "<b>404:</b> Deze pagina werd niet gevonden"
@@ -63,12 +67,12 @@ Settings = Backbone.Model.extend({
 					loginBtn: "LOGIN",
 					emailField: "EMAIL",
 					passwordField: "PASSWORD",
-					loginError: "Je paswoord is niet correct of je hebt geen toegang tot het stageplatform."
+					loginError: "The password you have entered is not correct."
 				},
 				internships:{
 					studentLabel: "Student",
-					organisationLabel: "Organisatin",
-					mentorLabel: "Mentor",
+					organisationLabel: "Organisation",
+					mentorLabel: "Coach",
 					interimLabel: "Interim evaluation",
 					finalLabel: "Final evaluation",
 					evaluateBtn: "Evaluate...",
@@ -80,7 +84,11 @@ Settings = Backbone.Model.extend({
 					remarkLabel: "Remark",
 					selectionLabel: "Select a score",
 					requiredField: "This field is required",
-					finalScoreLabel: "Final score"
+					finalScoreLabel: "Final score",
+					interimLabel: "Interim evaluation",
+					finalLabel: "Final evaluation",
+					saveLabel: "Save",
+					exportLabel: "Download PDF"
 				},
 				error: {
 				  notFound: "<b>404:</b> The page could not be found"

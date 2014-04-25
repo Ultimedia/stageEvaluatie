@@ -4,7 +4,8 @@ Evaluation = Backbone.Model.extend({
 		company_id: '',
 		internship_id: '',
 		evaluate_term: '',
-		final_score: ''
+		final_score: '',
+		update_score: false
 	},
 	initialize: function(){
 

@@ -1,9 +1,9 @@
 <form class="form-signin" id="loginForm" role="form">
 	<h4 class="form-signin-heading">Log In</h4>
 	<div class="bg-danger hide" id="errorBox">
-  	Je paswoord is niet correct of je hebt geen toegang tot het stageplatform.
+	<%= copy.loginError %>
   	</div>
-	<input id="email" type="email" class="form-control" placeholder="Email adres" required="" autofocus="">
-	<input id="password" type="password" class="form-control" placeholder="Paswoord" required="">
+	<input id="email" type="email" class="form-control" placeholder="<%= copy.emailField %>" required="" autofocus="">
+	<input id="password" type="password" class="form-control" placeholder="<%= copy.passwordField %>" required="">
 	<button class="btn btn-lg btn-primary btn-block" type="submit">Log In</button>
 </form>

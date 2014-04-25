@@ -4,10 +4,6 @@ appData.views.RegisterView = Backbone.View.extend({
         Backbone.on('languageChangeHandler', this.render);  
     },
 
-    registerHandler: function(){
-
-    },
-
     render: function() {
         this.$el.html(this.template({copy: appData.settings.attributes.copy[appData.settings.attributes.language].registration}));
         this.wireForm();
