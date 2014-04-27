@@ -25,7 +25,7 @@
     },
 
     logoClickHandler: function(){
-      window.history.back();
+      appData.router.navigate('#evaluate', true);
     },
 
     languageClickHandler: function(evt){

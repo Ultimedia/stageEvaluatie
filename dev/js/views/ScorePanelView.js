@@ -7,11 +7,11 @@ appData.views.ScorePanelView = Backbone.View.extend({
       appData.collections.questions.on("sync reset",this.render);
   		appData.collections.questions.fetch();
 
-      Backbone.on('languageChangeHandler', this.updateLanguage);  
+      Backbone.on('languageChangeHandler', this.render);  
     },
 
     pdfDownloadHandler: function(){
-      
+      alert('work in progress');
     },
 
     saveHandler: function(){
@@ -40,14 +40,6 @@ appData.views.ScorePanelView = Backbone.View.extend({
         $('#evaluateTable tbody').append(questionTableView.render().$el);
      },
 
-     updateLanguage: function(){
-            var term = this.collection.term;
-      var score = null;
-
-      appData.models.selectedScoreModel = this.model;
-      this.$el.html(this.template({scoreOptions: appData.collections.scores.toJSON(), internship: appData.models.selectedInternshipModel.toJSON(), term: this.collection.term, selectedScore: score, copy: appData.settings.attributes.copy[appData.settings.attributes.language].evaluation, language: appData.settings.attributes.language }));
-     },
-
     render: function() {
       var term = this.collection.term;
       var score = null;
@@ -59,7 +51,6 @@ appData.views.ScorePanelView = Backbone.View.extend({
       if(appData.models.selectedScoreModel){
         score = appData.models.selectedScoreModel.attributes.question_rating_id;
       }
-      console.log(score + "score");
 
 		  this.$el.html(this.template({scoreOptions: appData.collections.scores.toJSON(), internship: appData.models.selectedInternshipModel.toJSON(), term: this.collection.term, selectedScore: score, copy: appData.settings.attributes.copy[appData.settings.attributes.language].evaluation, language: appData.settings.attributes.language }));
 
