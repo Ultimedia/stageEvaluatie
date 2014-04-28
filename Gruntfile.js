@@ -10,7 +10,7 @@ var jspaths = [
   'dev/js/utils/*.js'
 ];
 var compiledtemplatepath = ["public/js/templates.js"];
-var concatpaths = compiledtemplatepath.concat(jspaths)
+var concatpaths = compiledtemplatepath.concat(jspaths);
 var templatepaths = ["dev/templates/*.html"];
 
 module.exports = function(grunt) {
@@ -22,11 +22,11 @@ module.exports = function(grunt) {
     watch: {
       scripts:{
         files: jspaths,
-        tasks: ['concat']
+        tasks: ['concat', 'uglify']
       },
       css:{
         files: csspaths,
-        tasks:['compass:development']
+        tasks:['compass:development', 'uglify']
       },
       templates: {
         files: templatepaths,
@@ -39,11 +39,20 @@ module.exports = function(grunt) {
         files: [
           // includes files within path
           {expand: true, flatten: true, src: templatepaths, dest: 'public/templates'},
-
         ]
       }
     },
-
+    
+    uglify: {
+      default: {
+        options: {
+          wrap: true
+        },
+        files: {
+          'public/js/main.js': concatpaths
+        }
+      }
+    },
 
     concat: {
       options: {
@@ -76,6 +85,7 @@ module.exports = function(grunt) {
       }
     }
   });
+  grunt.loadNpmTasks('grunt-contrib-uglify');
   grunt.loadNpmTasks('grunt-contrib-concat');
   grunt.loadNpmTasks('grunt-contrib-watch');
   grunt.loadNpmTasks('grunt-contrib-compass');
@@ -83,6 +93,6 @@ module.exports = function(grunt) {
 
 
   grunt.registerTask('default', ['concat','compass:development', 'copy']);
-  grunt.registerTask('production', ['concat','compass:production']);
+  grunt.registerTask('production', ['concat','compass:production', 'uglify']);
 
 };
