@@ -15,12 +15,14 @@ Settings = Backbone.Model.extend({
 					registerBtn: "REGISTREER",
 					nameField: "NAAM",
 					emailField: "EMAIL",
-					companyField: "BEDRIJF"
+					companyField: "BEDRIJF",
+					verifyCode: "VERIFICATIE CODE",
+					registerError: "De verificatie code is niet correct!"
 				},
 				login: {
 					loginBtn: "LOGIN",
 					emailField: "EMAIL",
-					passwordField: "PASSWORD",
+					passwordField: "PASWOORD",
 					loginError: "Je paswoord is niet correct of je hebt geen toegang tot het stageplatform."
 				},
 				internships:{
@@ -61,7 +63,9 @@ Settings = Backbone.Model.extend({
 					registerBtn: "REGISTER",
 					nameField: "NAME",
 					emailField: "EMAIL",
-					companyField: "COMPANY"
+					companyField: "COMPANY",
+					verifyCode: "VERIFICATION CODE",
+					registerError: "The verification code is incorrect!"
 				},
 				login: {
 					loginBtn: "LOGIN",

@@ -7,7 +7,6 @@ appData.routers.AppRouter = Backbone.Router.extend({
         "rate/interim/:id":  "rateinterim",
         "rate/final/:id":    "ratefinal",
         "*notFound": "notfound"
-
     },
 
     initialize: function () {
@@ -27,7 +26,7 @@ appData.routers.AppRouter = Backbone.Router.extend({
     register: function(){
         $('#container').empty().append(new appData.views.RegisterView().render().$el);
     },
-    
+
     evaluate: function(){
        if (appData.settings.get('loggedIn')) $('#container').empty().append(new appData.views.EvaluateView().render().$el);
        else appData.router.navigate('', true);

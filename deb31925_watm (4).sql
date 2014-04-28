@@ -3,7 +3,7 @@
 -- http://www.phpmyadmin.net
 --
 -- Host: localhost
--- Generation Time: Apr 28, 2014 at 12:45 PM
+-- Generation Time: Apr 28, 2014 at 02:28 PM
 -- Server version: 5.5.33
 -- PHP Version: 5.5.3
 
@@ -32,7 +32,7 @@ CREATE TABLE `stageapp_companies` (
   `company_email` varchar(200) NOT NULL,
   `company_name` varchar(200) NOT NULL,
   PRIMARY KEY (`company_id`)
-) ENGINE=InnoDB DEFAULT CHARSET=latin1 AUTO_INCREMENT=1 ;
+) ENGINE=InnoDB  DEFAULT CHARSET=latin1 AUTO_INCREMENT=2 ;
 
 -- --------------------------------------------------------
 
@@ -186,6 +186,33 @@ INSERT INTO `stageapp_question_ratings` (`question_rating_id`, `question_rating_
 (6, 'HELEMAAL NIET TEVREDEN', 'NOT AT ALL SATISFIED\r\n', '6-7 De stagiair(e) realiseerde onvoldoende. De stagiair(e) paste niet in het bedrijf of toonde onvoldoende inzet en engagement. Hij/zij beschikt niet over de nodige basis skills die je van een stagiair(e) verwacht.', '6-7 The trainee’s achievements were unsatisfactory. The trainee did not fit in the company or showed lack of commitment and engagement. He/she does not have the necessary basic skills that can be expected from a trainee.', '6-7'),
 (7, 'TELEURSTELLEND', 'DISAPPOINTING', '<6 Stuur me nooit nog zo een stagiair(e), ons bedrijf was er niets mee.', '<6 and less\r\nNever send me a trainee like this again, our company was better off without him/her.', '<6'),
 (8, '— NIET VAN TOEPASSING', '— NOT RELEVANT', '', '', '');
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `stageapp_users`
+--
+
+CREATE TABLE `stageapp_users` (
+  `user_id` int(11) NOT NULL AUTO_INCREMENT,
+  `user_email` varchar(50) NOT NULL,
+  `user_admin` int(11) NOT NULL DEFAULT '1',
+  PRIMARY KEY (`user_id`)
+) ENGINE=InnoDB  DEFAULT CHARSET=latin1 AUTO_INCREMENT=9 ;
+
+--
+-- Dumping data for table `stageapp_users`
+--
+
+INSERT INTO `stageapp_users` (`user_id`, `user_email`, `user_admin`) VALUES
+(1, 'maarten.bressinck@howest.be', 1),
+(2, 'jynse.cremers@howest.be', 1),
+(3, 'ellen.de.rycke@howest.be', 1),
+(4, 'christof.capens@howest.be', 1),
+(5, 'wouter.verweirder@howest.be', 1),
+(6, 'filip.joos@howest.be', 1),
+(7, 'frederic.baert@howest.be', 1),
+(8, 'frederik.jacques@howest.be', 1);
 
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
 /*!40101 SET CHARACTER_SET_RESULTS=@OLD_CHARACTER_SET_RESULTS */;

@@ -20,14 +20,18 @@ appData.views.RegisterView = Backbone.View.extend({
                     companyModel.set("company_contact", $("#nameInput", this.$el).val());
                     companyModel.set("company_email", $("#emailInput", this.$el).val());
                     companyModel.set("company_name", $("#bedrijfInput", this.$el).val());
+                    companyModel.set("verify_code", $("#verifyCode", this.$el).val());
+
                     companyModel.save(null, {
                         success: function (model, response) {                         
                             appData.settings.set('loggedIn', true);
                             appData.models.myCompanyModel = companyModel;
                             appData.router.navigate('evaluate', true);
+
+                            $('#errorBox').addClass('hide');
                         },
                         error: function (model, response) {
-
+                            $('#errorBox').removeClass('hide');
                         }
                     });
             }
