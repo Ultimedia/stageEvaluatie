@@ -6,10 +6,16 @@ var appData = {
   collections: {},
   settings: {},
   utils: {},
-  templates: {}
+  templates: {},
+  services: {}
 };
 
 appData.settings.apiPath = "/api";
+appData.services.servicePath = "/api/services/";
+appData.services.loginService =  appData.services.servicePath + "loginService.php";
+appData.services.registerService = appData.services.servicePath + "registerService.php";
+appData.services.pdfService = appData.services.servicePath + "pdfService.php";
+
 appData.settings.defaultLanguage = "/nl";
 
 // initialise jquery
@@ -29,9 +35,6 @@ $(document).on("ready", function () {
     Backbone.history.start();
   });
 });
-
-
-
 
 
 

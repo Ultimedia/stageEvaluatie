@@ -25,5 +25,4 @@ appData.views.QuestionListView = Backbone.View.extend({
 
     	return this;
     }
-   
 });

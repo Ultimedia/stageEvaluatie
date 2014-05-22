@@ -1,5 +1,5 @@
 Company = Backbone.Model.extend({
-	url: appData.settings.apiPath + "/companies",
+	url: appData.services.registerService,
 	defaults:{
 		company_email: undefined,
 		company_contact: undefined,

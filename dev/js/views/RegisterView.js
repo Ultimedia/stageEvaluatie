@@ -23,7 +23,10 @@ appData.views.RegisterView = Backbone.View.extend({
                     companyModel.set("verify_code", $("#verifyCode", this.$el).val());
 
                     companyModel.save(null, {
-                        success: function (model, response) {                         
+                        success: function (model, response) {    
+                            console.log(response);
+                            console.log(model);
+
                             appData.settings.set('loggedIn', true);
                             appData.models.myCompanyModel = companyModel;
                             appData.router.navigate('evaluate', true);

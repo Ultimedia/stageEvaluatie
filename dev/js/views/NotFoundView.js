@@ -9,3 +9,4 @@ appData.views.NotFoundView = Backbone.View.extend({
     	return this;
     }
 });
+

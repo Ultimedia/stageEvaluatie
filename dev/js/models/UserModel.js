@@ -3,8 +3,9 @@ User = Backbone.Model.extend({
 		email: "",
 		password: ""
 	},
-	url: appData.settings.apiPath + "/login",
+	url: appData.services.loginService,
 	initialize: function(){
 
 	}
 });
+

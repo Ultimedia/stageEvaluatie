@@ -22,7 +22,7 @@ module.exports = function(grunt) {
     watch: {
       scripts:{
         files: jspaths,
-        tasks: ['concat', 'uglify']
+        tasks: ['concat']
       },
       css:{
         files: csspaths,

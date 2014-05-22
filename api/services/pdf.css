@@ -1,0 +1,40 @@
+body { font-family: Helvetica, Arial; font-size: 11pt;  }
+p, .score-description {  font-size:12px; text-align: justify; margin-bottom: 4pt;  margin-top:0pt; }
+
+hr {	width: 70%; height: 1px; 
+	text-align: center; color: #999999; 
+	margin-top: 8pt; margin-bottom: 8pt; }
+
+a {	color: #000066; font-style: normal; text-decoration: underline; 
+	font-weight: normal; }
+
+ul {	text-indent: 5mm; margin-bottom: 9pt; }
+ol {	text-indent: 5mm; margin-bottom: 9pt; }
+
+
+
+h4 {font-size: 30px !important; 
+	font-family: "Helvetica", sans-serif; margin-top: 10pt; margin-bottom: 7pt; 
+	text-align: ;  margin-collapse:collapse; page-break-after:avoid; }
+
+h5 {font-size: 12px; }
+
+
+h4:last-of-type{
+	font-size: 14px !important;
+}
+
+.score td{
+	font-size: 12px;
+	padding: 10px 0;
+	line-height: 13px;
+}
+
+.score{
+
+}
+
+
+.no-pdf{
+	display: none;
+}

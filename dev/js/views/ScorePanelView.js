@@ -1,17 +1,14 @@
 appData.views.ScorePanelView = Backbone.View.extend({
+    className: "scorePage",
     initialize: function () {
       _.bindAll(this);  
 
       // get the questions
-  		appData.collections.questions = new QuestionsCollection();
+      appData.collections.questions = new QuestionsCollection();
       appData.collections.questions.on("sync reset",this.render);
-  		appData.collections.questions.fetch();
+      appData.collections.questions.fetch();
 
       Backbone.on('languageChangeHandler', this.render);  
-    },
-
-    pdfDownloadHandler: function(){
-      alert('work in progress');
     },
 
     saveHandler: function(){
@@ -20,7 +17,6 @@ appData.views.ScorePanelView = Backbone.View.extend({
 
     events:{
       "change #totalScoreOptions": "totalScoreChangeHandler",
-      "click #pdfDownload": "pdfDownloadHandler",
       "click #save": "saveHandler"
     },
 
@@ -36,7 +32,7 @@ appData.views.ScorePanelView = Backbone.View.extend({
     },
 
     renderQuestionViews: function(questionModel){
-		    var questionTableView = new appData.views.QuestionListView({model:questionModel, collection: this.collection});
+        var questionTableView = new appData.views.QuestionListView({model:questionModel, collection: this.collection});
         $('#evaluateTable tbody').append(questionTableView.render().$el);
      },
 
@@ -52,7 +48,7 @@ appData.views.ScorePanelView = Backbone.View.extend({
         score = appData.models.selectedScoreModel.attributes.question_rating_id;
       }
 
-		  this.$el.html(this.template({scoreOptions: appData.collections.scores.toJSON(), internship: appData.models.selectedInternshipModel.toJSON(), term: this.collection.term, selectedScore: score, copy: appData.settings.attributes.copy[appData.settings.attributes.language].evaluation, language: appData.settings.attributes.language }));
+      this.$el.html(this.template({scoreOptions: appData.collections.scores.toJSON(), internship: appData.models.selectedInternshipModel.toJSON(), term: this.collection.term, selectedScore: score, copy: appData.settings.attributes.copy[appData.settings.attributes.language].evaluation, language: appData.settings.attributes.language }));
 
       // prefill data
       if(appData.models.selectedScoreModel){
@@ -88,13 +84,21 @@ appData.views.ScorePanelView = Backbone.View.extend({
         }
       });
 
-     	return this;
+      //pdfDownload
+      if(this.model.get("pdf") !== ""){
+        $('#pdfDownload').show().attr('href', this.model.attributes.pdf);
+      }else{
+        $('#pdfDownload').hide();
+      }
+
+      return this;
     },
 
     wireForm: function(){
       var id = parseInt(this.collection.id);
       var term = this.collection.term;
       var evaluationModel = this.model;
+
 
       $('#evaluateForm', this.$el).validate({
         submitHandler: function(){
@@ -113,11 +117,35 @@ appData.views.ScorePanelView = Backbone.View.extend({
           var scoreIndex = parseInt($('#totalScoreOptions')[0].selectedIndex-1);
           var score = appData.collections.scores.models[scoreIndex].attributes.question_rating_points;
 
-          // save the score
-          evaluationModel.set('update_score', true);
-          evaluationModel.set('final_score', score);
-          $.when(evaluationModel.save()).then(function() {
-            window.location = "#evaluate";
+
+          var name = appData.models.selectedInternshipModel.get("student");
+              name = name.replace(/\s/g, '');
+
+          var html = $('.scorePage').html();
+
+          // now generate a pdf`
+          $.ajax({
+            url: appData.services.pdfService,
+            type:'POST',
+            data: "data="+html+"&name="+name+"&term="+term,
+            timeout:60000,
+              success:function(path){
+
+                  // save the score
+                  evaluationModel.set('pdf', path);
+                  evaluationModel.set('update_score', true);
+                  evaluationModel.set('final_score', score);
+                  
+                  $.when(evaluationModel.save()).then(function() { 
+          
+                    // forward the user when done
+                    window.location = "#evaluate";
+                  });
+
+              },
+              error: function(){
+                alert('Error');
+              }
           });
         }
       });
