@@ -150,16 +150,16 @@ Settings = Backbone.Model.extend({
 				registration: {
 					registerTitle: "Registratie",
 					registerBtn: "REGISTREER",
-					nameField: "NAAM",
-					emailField: "EMAIL",
-					companyField: "BEDRIJF",
-					verifyCode: "VERIFICATIE CODE",
+					nameField: "Naam",
+					emailField: "E-mailadres",
+					companyField: "Bedrijf",
+					verifyCode: "Verificatie code",
 					registerError: "De verificatie code is niet correct!"
 				},
 				login: {
-					loginBtn: "LOGIN",
-					emailField: "EMAIL",
-					passwordField: "PASWOORD",
+					loginBtn: "Login",
+					emailField: "E-mailadres",
+					passwordField: "Paswoord",
 					loginError: "Je paswoord is niet correct of je hebt geen toegang tot het stageplatform."
 				},
 				internships:{
@@ -198,16 +198,16 @@ Settings = Backbone.Model.extend({
 				registration: {
 					registerTitle: "Registration",
 					registerBtn: "REGISTER",
-					nameField: "NAME",
-					emailField: "EMAIL",
-					companyField: "COMPANY",
-					verifyCode: "VERIFICATION CODE",
+					nameField: "Name",
+					emailField: "Email",
+					companyField: "Company",
+					verifyCode: "Verification code",
 					registerError: "The verification code is incorrect!"
 				},
 				login: {
 					loginBtn: "LOGIN",
-					emailField: "EMAIL",
-					passwordField: "PASSWORD",
+					emailField: "Email",
+					passwordField: "Password",
 					loginError: "The password you have entered is not correct."
 				},
 				internships:{
@@ -355,7 +355,7 @@ ScoresCollection = Backbone.Collection.extend({
     },
 
     changeLanguage: function(){
-      //$('#brand h2').text(appData.settings.attributes.copy[appData.settings.attributes.language].general.title);
+      $('#brand h2').text(appData.settings.attributes.copy[appData.settings.attributes.language].general.title);
     }
 });
 
@@ -659,6 +659,49 @@ appData.views.ScorePanelView = Backbone.View.extend({
           dataCollection.each(function(question){
             renderQuestions(question);  
           },this);
+        }else{
+
+          // see if we can copy data (this feature prefills data in the final term if the interim term has data)
+          var evaluations = appData.models.selectedInternshipModel.attributes.evaluations;
+          if(term == "final" && evaluations.length > 0){
+
+              var evaluation_id = appData.models.selectedScoreModel.get("evaluation_id");
+
+              $(evaluations).each(function(index, element){
+
+
+                if(element.evaluate_term === "interim"){
+
+                  // get the scores model
+                  var scoresModel = appData.collections.scores.where({"question_rating_points": element.final_score})[0];
+                  if(scoresModel){
+                    $('#totalScoreOptions option').eq(scoresModel.attributes.question_rating_id).prop('selected', true);
+                  
+                    var copy = scoresModel.get('question_ratings_context_nl');
+                    if(appData.settings.attributes.language == "en"){
+                      copy = scoresModel.get('question_ratings_context_en');
+                    }
+
+                    $('.score-description', this.$el).text(copy);
+                  }
+
+                  var evaluation_id = element.evaluation_id;
+                  var internship_id = element.internship_id;
+                  var evaluation = element;
+                  var storedResults = new EvaluationCollection([], { id:evaluation_id, term: term });
+
+                  $.when(storedResults.fetch()).then(function() {
+                    if(storedResults.models.length > 0){
+                      $('#evaluateTable tbody').empty();
+
+                      storedResults.each(function(question){
+                        renderQuestions(question);  
+                      },this);
+                      }
+                  });
+                }
+              });
+            }
         }
       });
 
@@ -699,8 +742,25 @@ appData.views.ScorePanelView = Backbone.View.extend({
           var name = appData.models.selectedInternshipModel.get("student");
               name = name.replace(/\s/g, '');
 
-          var html = $('.scorePage').html();
 
+          // pdf generator
+          var html = $('.scorePage').html();
+          $('#pdfContainer').append(html);
+
+          // replace textareas with text
+          $('#pdfContainer textarea').each(function(index, element){
+            var text = $(element).text();
+            $(element).replaceWith("<p>" + text + "</p>");
+          });
+
+          // replace select options with the selected field
+          $('#pdfContainer select').each(function(index, element){
+            // grab the selected option
+            var text = $('option:selected', element).text();
+            $(element).replaceWith("<p>" + text + "</p>");
+          });
+
+          html = $('#pdfContainer').html();
           // now generate a pdf`
           $.ajax({
             url: appData.services.pdfService,

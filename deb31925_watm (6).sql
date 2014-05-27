@@ -3,7 +3,7 @@
 -- http://www.phpmyadmin.net
 --
 -- Host: localhost
--- Generation Time: Apr 28, 2014 at 02:28 PM
+-- Generation Time: May 27, 2014 at 10:06 AM
 -- Server version: 5.5.33
 -- PHP Version: 5.5.3
 
@@ -32,7 +32,7 @@ CREATE TABLE `stageapp_companies` (
   `company_email` varchar(200) NOT NULL,
   `company_name` varchar(200) NOT NULL,
   PRIMARY KEY (`company_id`)
-) ENGINE=InnoDB  DEFAULT CHARSET=latin1 AUTO_INCREMENT=2 ;
+) ENGINE=InnoDB DEFAULT CHARSET=latin1 AUTO_INCREMENT=1 ;
 
 -- --------------------------------------------------------
 
@@ -46,6 +46,7 @@ CREATE TABLE `stageapp_evaluations` (
   `internship_id` int(11) NOT NULL,
   `evaluate_term` varchar(40) NOT NULL,
   `final_score` varchar(11) NOT NULL,
+  `pdf` varchar(300) NOT NULL DEFAULT '',
   PRIMARY KEY (`evaluation_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1 AUTO_INCREMENT=1 ;
 

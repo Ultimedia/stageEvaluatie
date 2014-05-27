@@ -231,10 +231,10 @@ function getScores() {
 
 
 function getConnection() {
-	$dbhost="localhost";
-	$dbuser="deb31925_watm";
-	$dbpass="miniketen";
-	$dbname="deb31925_watm";
+	$dbhost="127.0.0.1";
+	$dbuser="devine";
+	$dbpass="8W3w03oA5iq32jt";
+	$dbname="devine";
 	$dbh = new PDO("mysql:host=$dbhost;dbname=$dbname", $dbuser, $dbpass);	
 	$dbh->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
 	$dbh -> exec("set names utf8");

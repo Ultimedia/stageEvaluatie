@@ -1,1 +1,347 @@
-body{background-color:#fff;border-top:10px solid #00ffff}#errorBox{padding:10px;margin-bottom:10px}#brand{position:relative;width:100%;max-width:960px;margin-top:0;margin-left:auto;margin-right:auto;margin-bottom:40px}#brand h2{margin-left:110px;margin-top:25px;text-transform:uppercase;font-weight:300;font-size:24px}h2,h1,h3,h4,h5{font-family:'Dosis', sans-serif;text-transform:uppercase}h2.helvetica,h1.helvetica,h3.helvetica,h4.helvetica,h5.helvetica{font-family:"Helvetica Neue", Helvetica, Arial, sans-serif;text-transform:none}#brand>header{position:relative}#brand>header>hgroup>h1{position:absolute;left:0;background-image:url("assets/devine_logo.png");background-repeat:no-repeat;margin:0;padding:0}#brand>header>hgroup>h1,#brand>header>hgroup>h1 a{display:block;width:188px;height:94px}#brand>header>hgroup>h1 span{display:none}#brand>header>hgroup>h2{display:none}.vcenter{display:inline-block;vertical-align:middle;float:none}.form-signin,.form-register{max-width:330px;padding:15px;margin:0 auto}.form-signin .form-signin-heading,.form-signin .checkbox,.form-register .form-signin-heading,.form-register .checkbox{margin-bottom:10px}.form-signin .checkbox,.form-register .checkbox{font-weight:normal}.form-signin .form-control,.form-register .form-control{position:relative;height:auto;-webkit-box-sizing:border-box;-moz-box-sizing:border-box;box-sizing:border-box;padding:10px;font-size:16px}.form-signin .form-control:focus,.form-register .form-control:focus{z-index:2}.form-signin input,.form-register input{color:#4c4b48;font-size:1.4em;font-weight:300;text-transform:uppercase;background-repeat:no-repeat;background-position:right center;border:1px solid #e8e8e8;border-radius:5px;padding:5px;margin-bottom:10px;background-color:#f7f7f7}.form-signin input.error,.form-register input.error{background:#ffe1ea}.form-signin input[type="email"],.form-register input[type="email"]{border-bottom-right-radius:0;border-bottom-left-radius:0;margin-bottom:10px}.form-signin input[type="password"],.form-signin #bedrijfInput,.form-register input[type="password"],.form-register #bedrijfInput{margin-bottom:10px;border-top-left-radius:0;border-top-right-radius:0}.form-signin label.error,.form-register label.error{display:none !important}#languageSelection{display:inline-block;float:right;position:absolute;right:15px;top:10px}#languageSelection li{float:left;list-style-type:none;padding-left:10px;padding-top:10px}#languageSelection li a{color:#00ffff;text-transform:uppercase;font-family:Dosis, sans-serif;font-size:18px;font-style:normal;font-variant:normal;font-weight:300}#languageSelection li a.selected{background:#AAFDFD;color:#333}.sub-header{padding-bottom:10px;border-bottom:1px solid #eee}.sidebar{display:none}@media (min-width: 768px){.sidebar{position:fixed;top:51px;bottom:0;left:0;z-index:1000;display:block;padding:20px;overflow-x:hidden;overflow-y:auto;background-color:#f5f5f5;border-right:1px solid #eee}}.nav-sidebar{margin-right:-21px;margin-bottom:20px;margin-left:-20px}.nav-sidebar>li>a{padding-right:20px;padding-left:20px}.nav-sidebar>.active>a{color:#fff;background-color:#428bca}.btn{text-transform:uppercase;font-weight:300;font-family:Dosis, sans-serif;border-radius:3px;-webkit-border-radius:3px;-moz-border-radius:3px}.main{padding:20px}@media (min-width: 768px){.main{padding-right:40px;padding-left:40px}}.main .page-header{margin-top:0}textarea.form-control{height:70px}#pdfDownload{margin-bottom:50px}.placeholders{margin-bottom:30px;text-align:center}.placeholders h4{margin-bottom:0}.placeholder{margin-bottom:20px}.placeholder img{display:inline-block;border-radius:50%}select.error{border-color:#a94442;-webkit-box-shadow:inset 0 1px 1px rgba(0,0,0,0.075);box-shadow:inset 0 1px 1px rgba(0,0,0,0.075)}#scoreTable label.error{color:#dd5857;padding:5px;font-size:12px;font-weight:normal}.bs-callout-danger{background-color:#fdf7f7;border-color:#d9534f}.bs-callout{margin:20px 0;padding:20px;border-left:3px solid #eee}.score-option{width:200px}.container{margin-right:auto;margin-left:auto;max-width:960px}
+/* line 1, ../../dev/sass/application.scss */
+body {
+  background-color: #fff;
+  border-top: 10px solid #00ffff;
+}
+
+/* line 7, ../../dev/sass/application.scss */
+#errorBox {
+  padding: 10px;
+  margin-bottom: 10px;
+}
+
+/* line 12, ../../dev/sass/application.scss */
+#brand {
+  position: relative;
+  width: 100%;
+  max-width: 960px;
+  margin-top: 0;
+  margin-left: auto;
+  margin-right: auto;
+  margin-bottom: 40px;
+}
+
+/* line 22, ../../dev/sass/application.scss */
+#brand h2 {
+  margin-left: 110px;
+  margin-top: 25px;
+  text-transform: uppercase;
+  font-weight: 300;
+  font-size: 24px;
+}
+
+/* line 30, ../../dev/sass/application.scss */
+#save {
+  margin-bottom: 20px;
+}
+
+/* line 34, ../../dev/sass/application.scss */
+h2, h1, h3, h4, h5 {
+  font-family: 'Dosis', sans-serif;
+  text-transform: uppercase;
+}
+
+/* line 39, ../../dev/sass/application.scss */
+h2.helvetica, h1.helvetica, h3.helvetica, h4.helvetica, h5.helvetica {
+  font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
+  text-transform: none;
+}
+
+/* line 44, ../../dev/sass/application.scss */
+#brand > header {
+  position: relative;
+}
+
+/* line 48, ../../dev/sass/application.scss */
+#brand > header > hgroup > h1 {
+  position: absolute;
+  left: 0;
+  background-image: url("assets/devine_logo.png");
+  background-repeat: no-repeat;
+  margin: 0;
+  padding: 0;
+}
+
+/* line 56, ../../dev/sass/application.scss */
+#brand > header > hgroup > h1, #brand > header > hgroup > h1 a {
+  display: block;
+  width: 188px;
+  height: 94px;
+}
+
+/* line 61, ../../dev/sass/application.scss */
+#brand > header > hgroup > h1 span {
+  display: none;
+}
+
+/* line 65, ../../dev/sass/application.scss */
+#brand > header > hgroup > h2 {
+  display: none;
+}
+
+/* line 69, ../../dev/sass/application.scss */
+.vcenter {
+  display: inline-block;
+  vertical-align: middle;
+  float: none;
+}
+
+/* line 75, ../../dev/sass/application.scss */
+.form-signin, .form-register {
+  max-width: 330px;
+  padding: 15px;
+  margin: 0 auto;
+}
+/* line 81, ../../dev/sass/application.scss */
+.form-signin .form-signin-heading,
+.form-signin .checkbox, .form-register .form-signin-heading,
+.form-register .checkbox {
+  margin-bottom: 10px;
+}
+/* line 84, ../../dev/sass/application.scss */
+.form-signin .checkbox, .form-register .checkbox {
+  font-weight: normal;
+}
+/* line 87, ../../dev/sass/application.scss */
+.form-signin .form-control, .form-register .form-control {
+  position: relative;
+  height: auto;
+  -webkit-box-sizing: border-box;
+  -moz-box-sizing: border-box;
+  box-sizing: border-box;
+  padding: 10px;
+  font-size: 16px;
+}
+/* line 96, ../../dev/sass/application.scss */
+.form-signin .form-control:focus, .form-register .form-control:focus {
+  z-index: 2;
+}
+/* line 99, ../../dev/sass/application.scss */
+.form-signin input, .form-register input {
+  color: #4c4b48;
+  font-size: 1.4em;
+  font-weight: 300;
+  text-transform: none !important;
+  background-repeat: no-repeat;
+  background-position: right center;
+  border: 1px solid #e8e8e8;
+  border-radius: 5px;
+  padding: 5px;
+  margin-bottom: 10px;
+  background-color: #f7f7f7;
+}
+/* line 112, ../../dev/sass/application.scss */
+.form-signin input.error, .form-register input.error {
+  background: #ffe1ea;
+}
+/* line 116, ../../dev/sass/application.scss */
+.form-signin input[type="email"], .form-register input[type="email"] {
+  border-bottom-right-radius: 0;
+  border-bottom-left-radius: 0;
+  margin-bottom: 10px;
+}
+/* line 121, ../../dev/sass/application.scss */
+.form-signin input[type="password"], .form-signin #bedrijfInput, .form-register input[type="password"], .form-register #bedrijfInput {
+  margin-bottom: 10px;
+  border-top-left-radius: 0;
+  border-top-right-radius: 0;
+}
+/* line 126, ../../dev/sass/application.scss */
+.form-signin label.error, .form-register label.error {
+  display: none !important;
+}
+
+/* line 131, ../../dev/sass/application.scss */
+#languageSelection {
+  display: inline-block;
+  float: right;
+  position: absolute;
+  right: 15px;
+  top: 10px;
+}
+
+/* line 138, ../../dev/sass/application.scss */
+#languageSelection li {
+  float: left;
+  list-style-type: none;
+  padding-left: 10px;
+  padding-top: 10px;
+}
+/* line 144, ../../dev/sass/application.scss */
+#languageSelection li a {
+  color: #00ffff;
+  text-transform: uppercase;
+  font-family: Dosis, sans-serif;
+  font-size: 18px;
+  font-style: normal;
+  font-variant: normal;
+  font-weight: 300;
+}
+/* line 154, ../../dev/sass/application.scss */
+#languageSelection li a.selected {
+  background: #AAFDFD;
+  color: #333333;
+}
+
+/*
+ * Global add-ons
+ */
+/* line 170, ../../dev/sass/application.scss */
+.sub-header {
+  padding-bottom: 10px;
+  border-bottom: 1px solid #eee;
+}
+
+/*
+ * Sidebar
+ */
+/* Hide for mobile, show later */
+/* line 181, ../../dev/sass/application.scss */
+.sidebar {
+  display: none;
+}
+
+@media (min-width: 768px) {
+  /* line 185, ../../dev/sass/application.scss */
+  .sidebar {
+    position: fixed;
+    top: 51px;
+    bottom: 0;
+    left: 0;
+    z-index: 1000;
+    display: block;
+    padding: 20px;
+    overflow-x: hidden;
+    overflow-y: auto;
+    /* Scrollable contents if viewport is shorter than content. */
+    background-color: #f5f5f5;
+    border-right: 1px solid #eee;
+  }
+}
+/* Sidebar navigation */
+/* line 201, ../../dev/sass/application.scss */
+.nav-sidebar {
+  margin-right: -21px;
+  /* 20px padding + 1px border */
+  margin-bottom: 20px;
+  margin-left: -20px;
+}
+
+/* line 206, ../../dev/sass/application.scss */
+.nav-sidebar > li > a {
+  padding-right: 20px;
+  padding-left: 20px;
+}
+
+/* line 210, ../../dev/sass/application.scss */
+.nav-sidebar > .active > a {
+  color: #fff;
+  background-color: #428bca;
+}
+
+/* line 216, ../../dev/sass/application.scss */
+.btn {
+  text-transform: uppercase;
+  font-weight: 300;
+  font-family: Dosis, sans-serif;
+  border-radius: 3px;
+  -webkit-border-radius: 3px;
+  -moz-border-radius: 3px;
+}
+
+/*
+ * Main content
+ */
+/* line 230, ../../dev/sass/application.scss */
+.main {
+  padding: 20px;
+}
+
+@media (min-width: 768px) {
+  /* line 234, ../../dev/sass/application.scss */
+  .main {
+    padding-right: 40px;
+    padding-left: 40px;
+  }
+}
+/* line 239, ../../dev/sass/application.scss */
+.main .page-header {
+  margin-top: 0;
+}
+
+/* line 243, ../../dev/sass/application.scss */
+textarea.form-control {
+  height: 70px;
+}
+
+/* line 247, ../../dev/sass/application.scss */
+#pdfDownload {
+  margin-bottom: 50px;
+}
+
+/*
+ * Placeholder dashboard ideas
+ */
+/* line 255, ../../dev/sass/application.scss */
+.placeholders {
+  margin-bottom: 30px;
+  text-align: center;
+}
+
+/* line 259, ../../dev/sass/application.scss */
+.placeholders h4 {
+  margin-bottom: 0;
+}
+
+/* line 262, ../../dev/sass/application.scss */
+.placeholder {
+  margin-bottom: 20px;
+}
+
+/* line 265, ../../dev/sass/application.scss */
+.placeholder img {
+  display: inline-block;
+  border-radius: 50%;
+}
+
+/* line 270, ../../dev/sass/application.scss */
+select.error {
+  border-color: #a94442;
+  -webkit-box-shadow: inset 0 1px 1px rgba(0, 0, 0, 0.075);
+  box-shadow: inset 0 1px 1px rgba(0, 0, 0, 0.075);
+}
+
+/* line 276, ../../dev/sass/application.scss */
+#scoreTable label.error {
+  color: #dd5857;
+  padding: 5px;
+  font-size: 12px;
+  font-weight: normal;
+}
+
+/* line 283, ../../dev/sass/application.scss */
+.bs-callout-danger {
+  background-color: #fdf7f7;
+  border-color: #d9534f;
+}
+
+/* line 288, ../../dev/sass/application.scss */
+.bs-callout {
+  margin: 20px 0;
+  padding: 20px;
+  border-left: 3px solid #eee;
+}
+
+/* line 294, ../../dev/sass/application.scss */
+.score-option {
+  width: 200px;
+}
+
+/* set a max-width for horizontal fluid layout and make it centered */
+/* line 299, ../../dev/sass/application.scss */
+.container {
+  margin-right: auto;
+  margin-left: auto;
+  max-width: 960px;
+  /* or 950px */
+}

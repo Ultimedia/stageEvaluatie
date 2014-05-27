@@ -45,7 +45,7 @@
     },
 
     changeLanguage: function(){
-      //$('#brand h2').text(appData.settings.attributes.copy[appData.settings.attributes.language].general.title);
+      $('#brand h2').text(appData.settings.attributes.copy[appData.settings.attributes.language].general.title);
     }
 });
 

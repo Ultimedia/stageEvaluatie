@@ -81,6 +81,49 @@ appData.views.ScorePanelView = Backbone.View.extend({
           dataCollection.each(function(question){
             renderQuestions(question);  
           },this);
+        }else{
+
+          // see if we can copy data (this feature prefills data in the final term if the interim term has data)
+          var evaluations = appData.models.selectedInternshipModel.attributes.evaluations;
+          if(term == "final" && evaluations.length > 0){
+
+              var evaluation_id = appData.models.selectedScoreModel.get("evaluation_id");
+
+              $(evaluations).each(function(index, element){
+
+
+                if(element.evaluate_term === "interim"){
+
+                  // get the scores model
+                  var scoresModel = appData.collections.scores.where({"question_rating_points": element.final_score})[0];
+                  if(scoresModel){
+                    $('#totalScoreOptions option').eq(scoresModel.attributes.question_rating_id).prop('selected', true);
+                  
+                    var copy = scoresModel.get('question_ratings_context_nl');
+                    if(appData.settings.attributes.language == "en"){
+                      copy = scoresModel.get('question_ratings_context_en');
+                    }
+
+                    $('.score-description', this.$el).text(copy);
+                  }
+
+                  var evaluation_id = element.evaluation_id;
+                  var internship_id = element.internship_id;
+                  var evaluation = element;
+                  var storedResults = new EvaluationCollection([], { id:evaluation_id, term: term });
+
+                  $.when(storedResults.fetch()).then(function() {
+                    if(storedResults.models.length > 0){
+                      $('#evaluateTable tbody').empty();
+
+                      storedResults.each(function(question){
+                        renderQuestions(question);  
+                      },this);
+                      }
+                  });
+                }
+              });
+            }
         }
       });
 
@@ -121,8 +164,25 @@ appData.views.ScorePanelView = Backbone.View.extend({
           var name = appData.models.selectedInternshipModel.get("student");
               name = name.replace(/\s/g, '');
 
-          var html = $('.scorePage').html();
 
+          // pdf generator
+          var html = $('.scorePage').html();
+          $('#pdfContainer').append(html);
+
+          // replace textareas with text
+          $('#pdfContainer textarea').each(function(index, element){
+            var text = $(element).text();
+            $(element).replaceWith("<p>" + text + "</p>");
+          });
+
+          // replace select options with the selected field
+          $('#pdfContainer select').each(function(index, element){
+            // grab the selected option
+            var text = $('option:selected', element).text();
+            $(element).replaceWith("<p>" + text + "</p>");
+          });
+
+          html = $('#pdfContainer').html();
           // now generate a pdf`
           $.ajax({
             url: appData.services.pdfService,
