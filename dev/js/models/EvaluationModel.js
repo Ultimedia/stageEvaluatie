@@ -6,7 +6,9 @@ Evaluation = Backbone.Model.extend({
 		evaluate_term: '',
 		final_score: '',
 		update_score: false,
-		pdf: ''
+		pdf: '',
+		score_id: '',
+		score_index: ''
 	},
 	initialize: function(){
 

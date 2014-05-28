@@ -15,25 +15,24 @@ $app->post('/internshipd/:id', 'updateInternship');
 $app->post('/evaluation', 'updateEvalution');
 $app->run();
 
-
-
 function updateInternship($id) {
-	$request = Slim::getInstance()->request();
-	$body = $request->getBody();
-	$internship = json_decode($body);
-	$sql = "UPDATE stageapp_internships SET final_score=:final_score, interim_score=:interim_score WHERE internship_id=:internship_id";
-	try {
-		$db = getConnection();
-		$stmt = $db->prepare($sql);  
-		$stmt->bindParam("final_score", $internship->final_score);
-		$stmt->bindParam("interim_score", $internship->interim_score);
-		$stmt->bindParam("internship_id", $id);
-		$stmt->execute();
-		$db = null;
-		echo json_encode($internship); 
-	} catch(PDOException $e) {
-		echo '{"error":{"text":'. $e->getMessage() .'}}'; 
-	}
+		$request = Slim::getInstance()->request();
+		$body = $request->getBody();
+		$internship = json_decode($body);
+		$sql = "UPDATE stageapp_internships SET final_score=:final_score, interim_score=:interim_score WHERE internship_id=:internship_id";
+		try {
+			$db = getConnection();
+			$stmt = $db->prepare($sql);  
+			$stmt->bindParam("final_score", $internship->final_score);
+			$stmt->bindParam("interim_score", $internship->interim_score);
+			$stmt->bindParam("internship_id", $id);
+			$stmt->execute();
+			$db = null;
+			echo json_encode($internship); 
+		} catch(PDOException $e) {
+			echo '{"error":{"text":'. $e->getMessage() .'}}'; 
+		}
+
 }
 
 function updateEvalution(){
@@ -52,7 +51,7 @@ function updateEvalution(){
 		if($matchingEvaluation){
 
 			if($evaluation->update_score){
-				$sql = "UPDATE stageapp_evaluations SET final_score=:final_score, pdf=:pdf WHERE internship_id = :internship_id AND evaluate_term = :evaluate_term";
+				$sql = "UPDATE stageapp_evaluations SET final_score=:final_score, pdf=:pdf, score_id=:score_id, score_index=:score_index WHERE internship_id = :internship_id AND evaluate_term = :evaluate_term";
 				try {
 					$db = getConnection();
 					$stmt = $db->prepare($sql);  
@@ -60,6 +59,9 @@ function updateEvalution(){
 					$stmt->bindParam("evaluate_term", $evaluation->evaluate_term);
 					$stmt->bindParam("pdf", $evaluation->pdf);
 					$stmt->bindParam("final_score", $evaluation->final_score);
+					$stmt->bindParam("score_id", $evaluation->score_id);
+					$stmt->bindParam("score_index", $evaluation->score_index);
+
 					$stmt->execute();
 					$db = null;
 					echo json_encode($matchingEvaluation); 
@@ -72,12 +74,14 @@ function updateEvalution(){
 
 		// if not insert this as a new entry in the database to create the unique evaluation id
 		}else{
-			$sql = "INSERT INTO stageapp_evaluations (company_id, evaluate_term, internship_id, pdf) VALUES (:company_id, :evaluate_term, :internship_id, :pdf)";
+			$sql = "INSERT INTO stageapp_evaluations (company_id, evaluate_term, internship_id, pdf, score_id, score_index) VALUES (:company_id, :evaluate_term, :internship_id, :pdf, :score_id, :score_index)";
 			$stmt = $db->prepare($sql);  
 			$stmt->bindParam("internship_id", $evaluation->internship_id);
 			$stmt->bindParam("company_id", $evaluation->company_id);
 			$stmt->bindParam("evaluate_term", $evaluation->evaluate_term);
 			$stmt->bindParam("pdf", $evaluation->pdf);
+			$stmt->bindParam("score_id", $evaluation->score_id);
+			$stmt->bindParam("score_index", $evaluation->score_index);
 			$stmt->execute();
 			$evaluation->evaluation_id = $db->lastInsertId();
 			$db = null;
@@ -181,24 +185,25 @@ function getQuestions() {
 }
 
 function getInternships() {
-	$sql = "select * FROM stageapp_internships";
-	try {
-		$db = getConnection();
-		$stmt = $db->query($sql);  
-		$internships = $stmt->fetchAll(PDO::FETCH_OBJ);
 
-		// get evaluation data
-		foreach ($internships as $internship) {
-		    $sql = "select * FROM stageapp_evaluations WHERE stageapp_evaluations.internship_id = " . $internship->internship_id;
-			$stmt = $db->query($sql);  	
-			$internship->evaluations = $stmt->fetchAll(PDO::FETCH_OBJ);
+		$sql = "select * FROM stageapp_internships";
+		try {
+			$db = getConnection();
+			$stmt = $db->query($sql);  
+			$internships = $stmt->fetchAll(PDO::FETCH_OBJ);
+
+			// get evaluation data
+			foreach ($internships as $internship) {
+			    $sql = "select * FROM stageapp_evaluations WHERE stageapp_evaluations.internship_id = " . $internship->internship_id;
+				$stmt = $db->query($sql);  	
+				$internship->evaluations = $stmt->fetchAll(PDO::FETCH_OBJ);
+			}
+			$db = null;
+
+			echo json_encode($internships);
+		} catch(PDOException $e) {
+			echo '{"error":{"text":'. $e->getMessage() .'}}'; 
 		}
-		$db = null;
-
-		echo json_encode($internships);
-	} catch(PDOException $e) {
-		echo '{"error":{"text":'. $e->getMessage() .'}}'; 
-	}
 }
 
 function getCompanies() {
@@ -231,14 +236,17 @@ function getScores() {
 
 
 function getConnection() {
-	$dbhost="127.0.0.1";
-	$dbuser="devine";
-	$dbpass="8W3w03oA5iq32jt";
-	$dbname="devine";
-	$dbh = new PDO("mysql:host=$dbhost;dbname=$dbname", $dbuser, $dbpass);	
+	$dbhost="mysqlhost2";
+	$dbuser="deb31925_watm";
+	$dbpass="miniketen";
+	$dbname="deb31925_watm";
+	//$dbh = new PDO("mysql:host=$dbhost;dbname=$dbname", $dbuser, $dbpass);	
+	$dbc = new mysqli('localhost', 'deb31925_watm', 'miniketen', 'deb31925_watm');
 	$dbh->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
 	$dbh -> exec("set names utf8");
 	return $dbh;
 }
+//		
 
 ?>
+

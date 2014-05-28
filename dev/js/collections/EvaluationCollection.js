@@ -6,6 +6,7 @@ EvaluationCollection = Backbone.Collection.extend({
 	},
 
 	url: function() {
-    	return "/api/answers/" + this.id;
+    	return "/app/webroot/stageapp/eni/alp/syn/answers/" + this.id;
   	}
 });
+

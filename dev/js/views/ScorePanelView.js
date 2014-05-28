@@ -21,9 +21,11 @@ appData.views.ScorePanelView = Backbone.View.extend({
     },
 
     totalScoreChangeHandler: function(evt){
-      var selectedScoreModel = appData.collections.scores.models[parseInt(evt.currentTarget.selectedIndex) -1];
+      var optionSelected = $("option:selected", evt.target).attr('rating-id');
 
+      var selectedScoreModel = appData.collections.scores.models[optionSelected -1];
       var copy = selectedScoreModel.get('question_ratings_context_nl');
+
       if(appData.settings.attributes.language == "en"){
         copy = selectedScoreModel.get('question_ratings_context_en');
       }
@@ -39,9 +41,11 @@ appData.views.ScorePanelView = Backbone.View.extend({
     render: function() {
       var term = this.collection.term;
       var score = null;
+      var evalu = this.model;
 
+      appData.container = this.$el;
       appData.models.selectedScoreModel = this.model;
-      appData.models.selectedScoreModel = appData.collections.scores.where({'question_rating_points': this.model.attributes.final_score})[0];
+      appData.models.selectedScoreModel = appData.collections.scores.where({'question_rating_id': this.model.attributes.score_id})[0];
 
       // prefill data      
       if(appData.models.selectedScoreModel){
@@ -49,6 +53,14 @@ appData.views.ScorePanelView = Backbone.View.extend({
       }
 
       this.$el.html(this.template({scoreOptions: appData.collections.scores.toJSON(), internship: appData.models.selectedInternshipModel.toJSON(), term: this.collection.term, selectedScore: score, copy: appData.settings.attributes.copy[appData.settings.attributes.language].evaluation, language: appData.settings.attributes.language }));
+    
+      $('#totalScoreOptions option', this.$el).each(function(index, element){
+        var value = $(element).val();
+        
+        if(value ==  evalu.attributes.final_score){
+          $(element).prop('selected', true);
+        }
+      });
 
       // prefill data
       if(appData.models.selectedScoreModel){
@@ -85,19 +97,20 @@ appData.views.ScorePanelView = Backbone.View.extend({
 
           // see if we can copy data (this feature prefills data in the final term if the interim term has data)
           var evaluations = appData.models.selectedInternshipModel.attributes.evaluations;
+
           if(term == "final" && evaluations.length > 0){
 
-              var evaluation_id = appData.models.selectedScoreModel.get("evaluation_id");
+              var evaluation_id = evalu.attributes.evaluation_id;
 
               $(evaluations).each(function(index, element){
-
 
                 if(element.evaluate_term === "interim"){
 
                   // get the scores model
-                  var scoresModel = appData.collections.scores.where({"question_rating_points": element.final_score})[0];
+                  var scoresModel = appData.collections.scores.where({"question_rating_id": element.score_id})[0];
                   if(scoresModel){
-                    $('#totalScoreOptions option').eq(scoresModel.attributes.question_rating_id).prop('selected', true);
+
+                    $('#totalScoreOptions option').eq(parseInt(element.score_index)+1).prop('selected', true);
                   
                     var copy = scoresModel.get('question_ratings_context_nl');
                     if(appData.settings.attributes.language == "en"){
@@ -129,7 +142,7 @@ appData.views.ScorePanelView = Backbone.View.extend({
 
       //pdfDownload
       if(this.model.get("pdf") !== ""){
-        $('#pdfDownload').show().attr('href', this.model.attributes.pdf);
+        $('#pdfDownload').show().attr('href', '/app/webroot/stageapp/pdf/' + this.model.attributes.pdf);
       }else{
         $('#pdfDownload').hide();
       }
@@ -158,8 +171,9 @@ appData.views.ScorePanelView = Backbone.View.extend({
 
           // update the internship model
           var scoreIndex = parseInt($('#totalScoreOptions')[0].selectedIndex-1);
-          var score = appData.collections.scores.models[scoreIndex].attributes.question_rating_points;
-
+          //var score = appData.collections.scores.models[scoreIndex].attributes.question_rating_points;
+          var score = $('#totalScoreOptions option:selected').val();
+          var score_id = $('#totalScoreOptions option:selected').attr('rating-id');
 
           var name = appData.models.selectedInternshipModel.get("student");
               name = name.replace(/\s/g, '');
@@ -167,20 +181,44 @@ appData.views.ScorePanelView = Backbone.View.extend({
 
           // pdf generator
           var html = $('.scorePage').html();
+          
           $('#pdfContainer').append(html);
 
           // replace textareas with text
           $('#pdfContainer textarea').each(function(index, element){
             var text = $(element).text();
+                text = ConvChar(text);
+
             $(element).replaceWith("<p>" + text + "</p>");
           });
+
+          var dd = $('#totalScoreOptions option:selected').text();
+              dd = ConvChar(dd);
+
+          $('#pdfContainer #totalScoreOptions').replaceWith('<p>' + dd + '</p>') 
 
           // replace select options with the selected field
           $('#pdfContainer select').each(function(index, element){
             // grab the selected option
             var text = $('option:selected', element).text();
+                text = ConvChar(text);
+
+
             $(element).replaceWith("<p>" + text + "</p>");
           });
+          
+          function ConvChar( str ) {
+            c = {'<':'', '>':'', '&':'&amp;', '"':'&quot;', "'":'&#039;',
+                 '#':'&#035;' };
+            return str.replace( /[<&>'"#]/g, function(s) { return c[s]; } );
+          }
+
+          $('#pdfContainer .score-points').each(function(index, element){
+            var t = $(element).text();
+                t = ConvChar(t);
+            $(element).text(t);
+          });
+
 
           html = $('#pdfContainer').html();
           // now generate a pdf`
@@ -195,13 +233,17 @@ appData.views.ScorePanelView = Backbone.View.extend({
                   evaluationModel.set('pdf', path);
                   evaluationModel.set('update_score', true);
                   evaluationModel.set('final_score', score);
-                  
+                  evaluationModel.set('score_id', score_id);
+                  evaluationModel.set('score_index', scoreIndex);
+
                   $.when(evaluationModel.save()).then(function() { 
-          
+                    // download pdf
+                    window.open(
+                      '/app/webroot/stageapp/pdf/' + path
+                    );
                     // forward the user when done
                     window.location = "#evaluate";
                   });
-
               },
               error: function(){
                 alert('Error');

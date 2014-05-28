@@ -8,14 +8,14 @@
 	$dbc = getDBConnection();		
 
 	// first see if this user has login permissions
-	$sql = "SELECT * FROM stageapp_users WHERE user_email = ? AND user_admin = 1";
+	$sql = "SELECT user_id FROM stageapp_users WHERE user_email = ? AND user_admin = 1";
 	if($stmt = $dbc->prepare($sql))
 	{
 		$stmt->bind_param('s',$email);
 		if($stmt->execute())
 		{
 			$stmt->store_result();
-			$stmt->bind_result($email);
+			$stmt->bind_result($user_id);
 			$stmt->fetch();
 
 			if($stmt->num_rows() == 0)
@@ -27,8 +27,14 @@
 				$result = $client->AuthenticateUserByEmail(array('email'=>$email,'password'=>$password)); // Kan niet encrypteren voor webservice, moet zo verstuurd worden... 
 				
 				if($result->AuthenticateUserByEmailResult == true) {
+					
+					// login session
+					session_start(); 
+					$_SESSION['login']=mysqli_insert_id($dbc); 
+
 					// Login correct
-					echo true;
+					echo $user_id;
+
 				} else {
 					// Login fout
 					echo false;

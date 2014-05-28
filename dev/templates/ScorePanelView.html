@@ -27,24 +27,19 @@
         <td>
           <select id="totalScoreOptions" name="scoref" class="form-control" required>
             <option value="placeholder" disabled selected><%= copy.selectionLabel %></option>
-            <% _.each(scoreOptions, function(scoreOption, index) { %>
-              <!-- Select the right language option -->
-              <% var option; 
-                if(language == "en"){
-                  option = scoreOption.question_rating_rating_en;
-                }else{
-                  option = scoreOption.question_rating_rating_nl;
-                }
-              %>
-
-              <!-- Verberg de "niet van toepassing optie -->
-              <% if((index+1) != scoreOptions.length){ 
-                 var selected = "";
-                 
-                 if(parseInt(selectedScore) == (index+1)){  selected = "selected"; } %>
-                   <option <%= selected %>><%= option %></option>
-              <% } %>
-            <% }); %>
+            <option rating-id="1">&gt;16</option>
+            <option rating-id="1">16</option>
+            <option rating-id="2">15</option>
+            <option rating-id="2">14</option>
+            <option rating-id="3">13</option>
+            <option rating-id="3">12</option>
+            <option rating-id="4">11</option>
+            <option rating-id="4">10</option>
+            <option rating-id="5">9</option>
+            <option rating-id="5">8</option>
+            <option rating-id="6">7</option>
+            <option rating-id="6">6</option>
+            <option rating-id="7">&lt;6</option>
           </select>
         </td>
         <td  colspan="2" class="score-description"></td>
@@ -53,7 +48,7 @@
   </table>
 </form>
   <a href="javascript:;" class="btn no-pdf btn-primary pull-right btn-lg" id="save"><%= copy.saveLabel %></a>
-  <a href="javascript:;" class="btn no-pdf pull-right btn-lg" id="pdfDownload"><%= copy.exportLabel %></a>
+  <a href="javascript:;" target="_blank" class="btn no-pdf pull-right btn-lg" id="pdfDownload"><%= copy.exportLabel %></a>
 </div>
 
 <div class="hide" id="pdfContainer">

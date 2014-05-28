@@ -10,8 +10,9 @@ var appData = {
   services: {}
 };
 
-appData.settings.apiPath = "/api";
-appData.services.servicePath = "/api/services/";
+appData.settings.apiPath = "/app/webroot/stageapp/eni/alp/syn/";
+appData.settings.pdfPath = "/app/webroot/stageapp/pdf/";
+appData.services.servicePath = "/app/webroot/stageapp/almo/services/";
 appData.services.loginService =  appData.services.servicePath + "loginService.php";
 appData.services.registerService = appData.services.servicePath + "registerService.php";
 appData.services.pdfService = appData.services.servicePath + "pdfService.php";

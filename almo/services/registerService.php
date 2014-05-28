@@ -25,6 +25,10 @@
 					"company_name"=>$company_name,
 					"company_id"=>mysqli_insert_id($dbc));
 
+					// login session
+					session_start(); 
+					$_SESSION['login']=mysqli_insert_id($dbc); 
+					
 				echo json_encode($company); 
 			}else{
 				echo false;
