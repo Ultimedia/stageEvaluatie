@@ -236,15 +236,15 @@ function getScores() {
 
 
 function getConnection() {
-	$dbhost="mysqlhost2";
+	/*$dbhost="mysqlhost2";
 	$dbuser="devine";
 	$dbpass="8W3w03oA5iq32jt";
-	$dbname="devine";
-	/*
+	$dbname="devine";*/
+
 	$dbhost="localhost";
-	$dbuser="deb31925_watm";
-	$dbpass="miniketen";
-	$dbname="deb31925_watm";*/
+	$dbuser="root";
+	$dbpass="root";
+	$dbname="stagetool";
 	$dbh = new PDO("mysql:host=$dbhost;dbname=$dbname", $dbuser, $dbpass);	
 	//$dbc = new mysqli('localhost', 'deb31925_watm', 'miniketen', 'deb31925_watm');
 	$dbh->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);

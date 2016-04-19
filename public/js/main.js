@@ -12,13 +12,14 @@ var appData = {
   services: {}
 };
 
-appData.settings.apiPath = "/app/webroot/stageapp/eni/alp/syn/";
+appData.settings.apiPath = "/app/webroot/stageapp/eni/alp/syn";
 appData.settings.pdfPath = "/app/webroot/stageapp/pdf/";
 appData.services.servicePath = "/app/webroot/stageapp/almo/services/";
 
-//appData.settings.apiPath = "eni/alp/syn/";
-//appData.settings.pdfPath = "/pdf/";
-//appData.services.servicePath = "almo/services/";
+appData.settings.apiPath = "eni/alp/syn/";
+appData.settings.pdfPath = "/pdf/";
+appData.services.servicePath = "almo/services/";
+
 
 appData.services.loginService =  appData.services.servicePath + "loginService.php";
 appData.services.registerService = appData.services.servicePath + "registerService.php";
@@ -285,9 +286,9 @@ EvaluationCollection = Backbone.Collection.extend({
 	},
 
 	url: function() {
-		return "/app/webroot/stageapp/eni/alp/syn/answers/" + this.id;
+		//return "/app/webroot/stageapp/eni/alp/syn/answers/" + this.id;
 
-    	//return "eni/alp/syn/answers/" + this.id;
+    	return "eni/alp/syn/answers/" + this.id;
   	}
 });
 
@@ -463,38 +464,38 @@ appData.views.InternListView = Backbone.View.extend({
 
 appData.views.LoginView = Backbone.View.extend({
     initialize: function () {
-      _.bindAll(this);    
-      Backbone.on('languageChangeHandler', this.render);
+        _.bindAll(this);
+        Backbone.on('languageChangeHandler', this.render);
     },
 
-    render: function() {
-    	this.$el.html(this.template({copy: appData.settings.attributes.copy[appData.settings.attributes.language].login}));
+    render: function () {
+        this.$el.html(this.template({copy: appData.settings.attributes.copy[appData.settings.attributes.language].login}));
 
-      var template = this.$el;
+        var template = this.$el;
 
-  		$('#loginForm', this.$el).validate({
-  			submitHandler: function(){
+        $('#loginForm', this.$el).validate({
+            submitHandler: function () {
 
-  		    // store the user
-  		    appData.models.userModel = new User();
-          appData.models.userModel.set('password', $('#password', template).val());
-          appData.models.userModel.set('email', $('#email', template).val());
-          appData.models.userModel.save(null, {
-              success: function (model, response) {
-                $('#errorBox').addClass('hide');
+                // store the user
+                appData.models.userModel = new User();
+                appData.models.userModel.set('password', $('#password', template).val());
+                appData.models.userModel.set('email', $('#email', template).val());
+                appData.models.userModel.save(null, {
+                    success: function (model, response) {
+                        $('#errorBox').addClass('hide');
 
-                // set loggedIn to true
-                appData.settings.set('loggedIn', true);
-                appData.router.navigate('evaluate', true);
-              },
-              error: function (model, response) {
-                $('#errorBox').removeClass('hide');
-              }
-          });
-  			}
-  		});
+                        // set loggedIn to true
+                        appData.settings.set('loggedIn', true);
+                        appData.router.navigate('evaluate', true);
+                    },
+                    error: function (model, response) {
+                        $('#errorBox').removeClass('hide');
+                    }
+                });
+            }
+        });
 
-      return this;
+        return this;
     }
 });
 

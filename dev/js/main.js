@@ -10,13 +10,14 @@ var appData = {
   services: {}
 };
 
-appData.settings.apiPath = "/app/webroot/stageapp/eni/alp/syn/";
+appData.settings.apiPath = "/app/webroot/stageapp/eni/alp/syn";
 appData.settings.pdfPath = "/app/webroot/stageapp/pdf/";
 appData.services.servicePath = "/app/webroot/stageapp/almo/services/";
 
-//appData.settings.apiPath = "eni/alp/syn/";
-//appData.settings.pdfPath = "/pdf/";
-//appData.services.servicePath = "almo/services/";
+appData.settings.apiPath = "eni/alp/syn/";
+appData.settings.pdfPath = "/pdf/";
+appData.services.servicePath = "almo/services/";
+
 
 appData.services.loginService =  appData.services.servicePath + "loginService.php";
 appData.services.registerService = appData.services.servicePath + "registerService.php";

@@ -22,7 +22,8 @@
 			{
 				echo false;
 			}else{
-
+				echo 13;
+				/*
 				$client=new soapclient('https://services.howest.be/Howest.Identity.Web.Service/v1.1/facade.asmx?WSDL', array('trace' => 1));
 				$result = $client->AuthenticateUserByEmail(array('email'=>$email,'password'=>$password)); // Kan niet encrypteren voor webservice, moet zo verstuurd worden... 
 				
@@ -38,7 +39,7 @@
 				} else {
 					// Login fout
 					echo false;
-				}
+				}*/
 			}
 		}else{
 			echo false;

@@ -10,7 +10,7 @@
 	$dbc = getDBConnection();		
 
 	// first check the verification code
-	if($verification_code == "140613"){
+	if($verification_code == "160616"){
 
 		$sql = "INSERT INTO stageapp_companies (company_contact, company_email, company_name) VALUES (?,?,?)";
 		$stmt = null;
